@@ -27,6 +27,8 @@ namespace GenerateXSD
 
             streamWriter.WriteLine("\n</xs:schema >");
             streamWriter.Close();
+
+            File.Copy("Model.xsd", "..\\..\\..\\DataBase\\bin\\Debug\\Model.xsd", true);
         }
 
         static List<string> ClassInput(StreamWriter streamWriter)
