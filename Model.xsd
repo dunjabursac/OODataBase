@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"> 
+
+<xs:complexType name="Item">
+<xs:sequence>
+<xs:element name="Price" type="xs:int"/> 
+<xs:element name="Brand" type="xs:string"/> 
+</xs:sequence>
+
+</xs:complexType>
+
+<xs:complexType name="Computer">
+<xs:complexContent>
+<xs:extension base="Item">
+<xs:sequence>
+<xs:element name="RAM" type="xs:int"/> 
+<xs:element name="ROM" type="xs:int"/> 
+<xs:element name="Processor" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Laptop">
+<xs:complexContent>
+<xs:extension base="Computer">
+<xs:sequence>
+<xs:element name="BatteryCapacity" type="xs:int"/> 
+<xs:element name="ScreenSize" type="xs:int"/> 
+<xs:element name="Resolution" type="xs:string"/> 
+<xs:element name="KeyboardType" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Desktop">
+<xs:complexContent>
+<xs:extension base="Computer">
+<xs:sequence>
+<xs:element name="Type" type="xs:string"/> 
+<xs:element name="PowerSupply" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Tablet">
+<xs:complexContent>
+<xs:extension base="Computer">
+<xs:sequence>
+<xs:element name="BatteryCapacity" type="xs:int"/> 
+<xs:element name="ScreenSize" type="xs:int"/> 
+<xs:element name="Resolution" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Appliances">
+<xs:complexContent>
+<xs:extension base="Item">
+<xs:sequence>
+<xs:element name="NoiseLevel" type="xs:int"/> 
+<xs:element name="EnergyClass" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="CoolingDevice">
+<xs:complexContent>
+<xs:extension base="Appliances">
+<xs:sequence>
+<xs:element name="MinCoolingTemperature" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="AirConditioner">
+<xs:complexContent>
+<xs:extension base="CoolingDevice">
+<xs:sequence>
+<xs:element name="CoolingCapacity" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Fridge">
+<xs:complexContent>
+<xs:extension base="CoolingDevice">
+<xs:sequence>
+<xs:element name="Type" type="xs:string"/> 
+<xs:element name="Volume" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Freezer">
+<xs:complexContent>
+<xs:extension base="CoolingDevice">
+<xs:sequence>
+<xs:element name="Volume" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Machine">
+<xs:complexContent>
+<xs:extension base="Appliances">
+<xs:sequence>
+<xs:element name="Volume" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="WashingMachine">
+<xs:complexContent>
+<xs:extension base="Machine">
+<xs:sequence>
+<xs:element name="TubDiameter" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="DryingMachine">
+<xs:complexContent>
+<xs:extension base="Machine">
+<xs:sequence>
+<xs:element name="TubDiameter" type="xs:int"/> 
+<xs:element name="DryingMode" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Dishwasher">
+<xs:complexContent>
+<xs:extension base="Machine">
+<xs:sequence>
+<xs:element name="NumberOfLevels" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Cooking">
+<xs:complexContent>
+<xs:extension base="Appliances">
+<xs:sequence>
+<xs:element name="MaxTemperature" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Cooker">
+<xs:complexContent>
+<xs:extension base="Cooking">
+<xs:sequence>
+<xs:element name="PanelType" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Oven">
+<xs:complexContent>
+<xs:extension base="Cooking">
+<xs:sequence>
+<xs:element name="Volume" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Microwave">
+<xs:complexContent>
+<xs:extension base="Cooking">
+<xs:sequence>
+<xs:element name="Volume" type="xs:int"/> 
+<xs:element name="Managing" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Phone">
+<xs:complexContent>
+<xs:extension base="Item">
+<xs:sequence>
+<xs:element name="SpeakerVolume" type="xs:int"/> 
+<xs:element name="MicrophoneSensitivity" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Landline">
+<xs:complexContent>
+<xs:extension base="Phone">
+<xs:sequence>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Wireless">
+<xs:complexContent>
+<xs:extension base="Landline">
+<xs:sequence>
+<xs:element name="BatteryCapacity" type="xs:int"/> 
+<xs:element name="Range" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Wire">
+<xs:complexContent>
+<xs:extension base="Landline">
+<xs:sequence>
+<xs:element name="CableLength" type="xs:int"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Mobile">
+<xs:complexContent>
+<xs:extension base="Phone">
+<xs:sequence>
+<xs:element name="OS" type="xs:string"/> 
+<xs:element name="RAM" type="xs:int"/> 
+<xs:element name="ROM" type="xs:int"/> 
+<xs:element name="ScreenSize" type="xs:int"/> 
+<xs:element name="Resolution" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Smart">
+<xs:complexContent>
+<xs:extension base="Mobile">
+<xs:sequence>
+<xs:element name="WiFiType" type="xs:string"/> 
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Regular">
+<xs:complexContent>
+<xs:extension base="Mobile">
+<xs:sequence>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:element name="Element0" type="Laptop"/> 
+
+<xs:element name="Element1" type="Desktop"/> 
+
+<xs:element name="Element2" type="Tablet"/> 
+
+<xs:element name="Element3" type="AirConditioner"/> 
+
+<xs:element name="Element4" type="Fridge"/> 
+
+<xs:element name="Element5" type="Freezer"/> 
+
+<xs:element name="Element6" type="WashingMachine"/> 
+
+<xs:element name="Element7" type="DryingMachine"/> 
+
+<xs:element name="Element8" type="Dishwasher"/> 
+
+<xs:element name="Element9" type="Cooker"/> 
+
+<xs:element name="Element10" type="Oven"/> 
+
+<xs:element name="Element11" type="Microwave"/> 
+
+<xs:element name="Element12" type="Wireless"/> 
+
+<xs:element name="Element13" type="Wire"/> 
+
+<xs:element name="Element14" type="Smart"/> 
+
+<xs:element name="Element15" type="Regular"/> 
+
+</xs:schema >
