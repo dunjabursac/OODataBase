@@ -38,17 +38,12 @@ namespace DataBase
                 XmlTextReader reader = new XmlTextReader("Model.xsd");
                 myschema = XmlSchema.Read(reader, ValidationCallback);
                 myschema.Write(Console.Out);
-
-                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 myschema = null;
             }
-
-
-
 
 
             for (int i=0; i<myschema.Items.Count; i++)
@@ -77,6 +72,24 @@ namespace DataBase
                 Console.Write("ERROR: ");
 
             Console.WriteLine(args.Message);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Laptop laptop = new Laptop()
+            {
+                Price = Convert.ToInt32(price.Text),
+                Brand = brand.Text,
+                RAM = Convert.ToInt32(ram.Text),
+                ROM = Convert.ToInt32(rom.Text),
+                Processor = processor.Text,
+                KeyboardType = keyboardType.Text,
+                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
+                ScreenSize = Convert.ToInt32(screenSize.Text),
+                Resolution = resolution.Text
+            };
+
+            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
         }
     }
 }

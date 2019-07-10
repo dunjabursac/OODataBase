@@ -5,8 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBase"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="550" Width="400">
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Laptop</Label>
+
+        <Label Grid.Row="2" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Price</Label>
+        <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Brand</Label>
+        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">RAM</Label>
+        <Label Grid.Row="8" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">ROM</Label>
+        <Label Grid.Row="10" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Processor</Label>
+        <Label Grid.Row="12" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Keyboard type</Label>
+        <Label Grid.Row="14" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Battery capacity</Label>
+        <Label Grid.Row="16" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Screen size</Label>
+        <Label Grid.Row="18" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Resolution</Label>
+
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="price"></TextBox>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="brand"></TextBox>
+        <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="ram"></TextBox>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="rom"></TextBox>
+        <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="processor"></TextBox>
+        <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="keyboardType"></TextBox>
+        <TextBox Grid.Row="14" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="batteryCapacity"></TextBox>
+        <TextBox Grid.Row="16" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="screenSize"></TextBox>
+        <TextBox Grid.Row="18" Grid.Column="1" Margin="10 5" TextAlignment="Center" Name="resolution"></TextBox>
+
+        <Button Grid.Row="20" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Add laptop</Button>
     </Grid>
 </Window>
