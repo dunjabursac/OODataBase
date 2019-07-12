@@ -55,6 +55,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AddAirConditioner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddCooker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddDesktop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddDishwasher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddDryingMachine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddFreezer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddFridge.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddLaptop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -63,6 +91,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AddAirConditioner.xaml.cs">
+      <DependentUpon>AddAirConditioner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddCooker.xaml.cs">
+      <DependentUpon>AddCooker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddDesktop.xaml.cs">
+      <DependentUpon>AddDesktop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddDishwasher.xaml.cs">
+      <DependentUpon>AddDishwasher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddDryingMachine.xaml.cs">
+      <DependentUpon>AddDryingMachine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddFreezer.xaml.cs">
+      <DependentUpon>AddFreezer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddFridge.xaml.cs">
+      <DependentUpon>AddFridge.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddLaptop.xaml.cs">
       <DependentUpon>AddLaptop.xaml</DependentUpon>
     </Compile>

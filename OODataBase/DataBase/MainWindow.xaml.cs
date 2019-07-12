@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -55,10 +56,16 @@ namespace DataBase
                         string className = ((XmlSchemaElement)myschema.Items[i]).SchemaTypeName.Name;
 
                         Tables.Add(className, new Dictionary<int, object>());
+                        if (!File.Exists(className + ".xml"))
+                        {
+                            StreamWriter streamWriter = new StreamWriter(className + ".xml");
+                            streamWriter.Close();
+                        }
                     }
                 }
                 catch(Exception e)
                 {
+                    Console.WriteLine("Error:" + e.Message);
                     continue;
                 }
             }
@@ -76,7 +83,7 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            AddLaptop addLaptop = new AddLaptop(Tables);
+            AddFridge addLaptop = new AddFridge(Tables);
             addLaptop.Show();
         }
     }

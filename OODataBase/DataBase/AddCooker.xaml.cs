@@ -17,13 +17,13 @@ using System.Xml.Serialization;
 namespace DataBase
 {
     /// <summary>
-    /// Interaction logic for AddLaptop.xaml
+    /// Interaction logic for AddCooker.xaml
     /// </summary>
-    public partial class AddLaptop : Window
+    public partial class AddCooker : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddLaptop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddCooker(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,26 +31,23 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Laptop laptop = new Laptop()
+            Cooker cooker = new Cooker()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                RAM = Convert.ToInt32(ram.Text),
-                ROM = Convert.ToInt32(rom.Text),
-                Processor = processor.Text,
-                KeyboardType = keyboardType.Text,
-                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
-                ScreenSize = Convert.ToInt32(screenSize.Text),
-                Resolution = resolution.Text
+                MaxTemperature = Convert.ToInt32(maxTemperature.Text),
+                EnergyClass = energyClass.Text,
+                PanelType = panelType.Text,
+                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
+            Tables["Cooker"].Add(Tables["Cooker"].Count, cooker);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Laptop));
+            XmlSerializer xs = new XmlSerializer(typeof(Cooker));
 
-            TextWriter txtWriter = new StreamWriter("Laptop.xml", true);
+            TextWriter txtWriter = new StreamWriter("Cooker.xml", true);
 
-            xs.Serialize(txtWriter, laptop);
+            xs.Serialize(txtWriter, cooker);
 
             txtWriter.Close();
 
