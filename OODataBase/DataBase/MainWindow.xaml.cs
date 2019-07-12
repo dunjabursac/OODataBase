@@ -79,5 +79,11 @@ namespace DataBase
             AddLaptop addLaptop = new AddLaptop(Tables);
             addLaptop.Show();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            SelectItems selectItems = new SelectItems(Tables);
+            selectItems.Show();
+        }
     }
 }

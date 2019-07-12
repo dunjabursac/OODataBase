@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550" Width="400">
     <Grid Background="AliceBlue">
-        
+
         <Button Width="200" Height="50" FontSize="16" Click="Button_Click">Add laptop</Button>
-        
+        <Button Content="Select items" FontSize="16" HorizontalAlignment="Left" Height="50" Margin="97,400,0,0" VerticalAlignment="Top" Width="200" Click="Button_Click_1"/>
+
     </Grid>
 </Window>
