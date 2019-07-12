@@ -76,20 +76,8 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Laptop laptop = new Laptop()
-            {
-                Price = Convert.ToInt32(price.Text),
-                Brand = brand.Text,
-                RAM = Convert.ToInt32(ram.Text),
-                ROM = Convert.ToInt32(rom.Text),
-                Processor = processor.Text,
-                KeyboardType = keyboardType.Text,
-                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
-                ScreenSize = Convert.ToInt32(screenSize.Text),
-                Resolution = resolution.Text
-            };
-
-            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
+            AddLaptop addLaptop = new AddLaptop(Tables);
+            addLaptop.Show();
         }
     }
 }
