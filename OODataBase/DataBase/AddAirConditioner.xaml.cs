@@ -17,13 +17,13 @@ using System.Xml.Serialization;
 namespace DataBase
 {
     /// <summary>
-    /// Interaction logic for AddLaptop.xaml
+    /// Interaction logic for AddAirConditioner.xaml
     /// </summary>
-    public partial class AddLaptop : Window
+    public partial class AddAirConditioner : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddLaptop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddAirConditioner(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,26 +31,23 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Laptop laptop = new Laptop()
+            AirConditioner airConditioner = new AirConditioner()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                RAM = Convert.ToInt32(ram.Text),
-                ROM = Convert.ToInt32(rom.Text),
-                Processor = processor.Text,
-                KeyboardType = keyboardType.Text,
-                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
-                ScreenSize = Convert.ToInt32(screenSize.Text),
-                Resolution = resolution.Text
+                CoolingCapacity = Convert.ToInt32(coolingCapacity.Text),
+                EnergyClass = energyClass.Text,
+                MinCoolingTemperature = Convert.ToInt32(minCoolingTemperature.Text),
+                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
+            Tables["AirConditioner"].Add(Tables["AirConditioner"].Count, airConditioner);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Laptop));
+            XmlSerializer xs = new XmlSerializer(typeof(AirConditioner));
 
-            TextWriter txtWriter = new StreamWriter("Laptop.xml", true);
+            TextWriter txtWriter = new StreamWriter("AirConditioner.xml", true);
 
-            xs.Serialize(txtWriter, laptop);
+            xs.Serialize(txtWriter, airConditioner);
 
             txtWriter.Close();
 

@@ -17,13 +17,13 @@ using System.Xml.Serialization;
 namespace DataBase
 {
     /// <summary>
-    /// Interaction logic for AddLaptop.xaml
+    /// Interaction logic for AddFridge.xaml
     /// </summary>
-    public partial class AddLaptop : Window
+    public partial class AddFridge : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddLaptop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddFridge(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,26 +31,24 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Laptop laptop = new Laptop()
+            Fridge fridge = new Fridge()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                RAM = Convert.ToInt32(ram.Text),
-                ROM = Convert.ToInt32(rom.Text),
-                Processor = processor.Text,
-                KeyboardType = keyboardType.Text,
-                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
-                ScreenSize = Convert.ToInt32(screenSize.Text),
-                Resolution = resolution.Text
+                MinCoolingTemperature = Convert.ToInt32(minCoolingTemperature.Text),
+                EnergyClass = energyClass.Text,
+                Volume = Convert.ToInt32(volume.Text),
+                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
+                Type = type.Text
             };
 
-            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
+            Tables["Fridge"].Add(Tables["Fridge"].Count, fridge);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Laptop));
+            XmlSerializer xs = new XmlSerializer(typeof(Fridge));
 
-            TextWriter txtWriter = new StreamWriter("Laptop.xml", true);
+            TextWriter txtWriter = new StreamWriter("Fridge.xml", true);
 
-            xs.Serialize(txtWriter, laptop);
+            xs.Serialize(txtWriter, fridge);
 
             txtWriter.Close();
 

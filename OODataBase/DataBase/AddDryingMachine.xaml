@@ -1,0 +1,56 @@
+﻿<Window x:Class="DataBase.AddDryingMachine"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataBase"
+        mc:Ignorable="d"
+        Title="AddDryingMachine" Height="550" Width="400">
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Drying Machine</Label>
+
+        <Label Grid.Row="2" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Price</Label>
+        <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Brand</Label>
+        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Tub Diameter</Label>
+        <Label Grid.Row="8" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Energy Class</Label>
+        <Label Grid.Row="10" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Volume</Label>
+        <Label Grid.Row="12" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Noise Level</Label>
+        <Label Grid.Row="14" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Drying Mode</Label>
+
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="price"></TextBox>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="brand"></TextBox>
+        <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="tubDiameter"></TextBox>
+        <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="energyClass"></TextBox>
+        <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="volume"></TextBox>
+        <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="noiseLevel"></TextBox>
+        <TextBox Grid.Row="14" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="dryingMode"></TextBox>
+
+        <Button Grid.Row="16" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Add Drying Machine</Button>
+    </Grid>
+</Window>

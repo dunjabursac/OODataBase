@@ -17,13 +17,13 @@ using System.Xml.Serialization;
 namespace DataBase
 {
     /// <summary>
-    /// Interaction logic for AddLaptop.xaml
+    /// Interaction logic for AddDryingMachine.xaml
     /// </summary>
-    public partial class AddLaptop : Window
+    public partial class AddDryingMachine : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddLaptop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddDryingMachine(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,26 +31,24 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Laptop laptop = new Laptop()
+            DryingMachine dryingMachine = new DryingMachine()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                RAM = Convert.ToInt32(ram.Text),
-                ROM = Convert.ToInt32(rom.Text),
-                Processor = processor.Text,
-                KeyboardType = keyboardType.Text,
-                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
-                ScreenSize = Convert.ToInt32(screenSize.Text),
-                Resolution = resolution.Text
+                TubDiameter = Convert.ToInt32(tubDiameter.Text),
+                EnergyClass = energyClass.Text,
+                Volume = Convert.ToInt32(volume.Text),
+                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
+                DryingMode = dryingMode.Text
             };
 
-            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
+            Tables["DryingMachine"].Add(Tables["DryingMachine"].Count, dryingMachine);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Laptop));
+            XmlSerializer xs = new XmlSerializer(typeof(DryingMachine));
 
-            TextWriter txtWriter = new StreamWriter("Laptop.xml", true);
+            TextWriter txtWriter = new StreamWriter("DryingMachine.xml", true);
 
-            xs.Serialize(txtWriter, laptop);
+            xs.Serialize(txtWriter, dryingMachine);
 
             txtWriter.Close();
 
