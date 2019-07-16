@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace DataBase.AddItems
 {
     /// <summary>
-    /// Interaction logic for AddLaptop.xaml
+    /// Interaction logic for AddDesktop.xaml
     /// </summary>
-    public partial class AddLaptop : Window
+    public partial class AddDesktop : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddLaptop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddDesktop(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,26 +31,24 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Laptop laptop = new Laptop()
+            Desktop desktop = new Desktop()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
                 RAM = Convert.ToInt32(ram.Text),
                 ROM = Convert.ToInt32(rom.Text),
                 Processor = processor.Text,
-                KeyboardType = keyboardType.Text,
-                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
-                ScreenSize = Convert.ToInt32(screenSize.Text),
-                Resolution = resolution.Text
+                Type = type.Text,
+                PowerSupply = Convert.ToInt32(powerSupply.Text)
             };
 
-            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
+            Tables["Desktop"].Add(Tables["Desktop"].Count, desktop);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Laptop));
+            XmlSerializer xs = new XmlSerializer(typeof(Desktop));
 
-            TextWriter txtWriter = new StreamWriter("Laptop.xml", true);
+            TextWriter txtWriter = new StreamWriter("Desktop.xml", true);
 
-            xs.Serialize(txtWriter, laptop);
+            xs.Serialize(txtWriter, desktop);
 
             txtWriter.Close();
 

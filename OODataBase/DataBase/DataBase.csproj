@@ -55,35 +55,67 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="AddAirConditioner.xaml">
+    <Page Include="AddItems\AddAirConditioner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddCooker.xaml">
+    <Page Include="AddItems\AddCooker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddDesktop.xaml">
+    <Page Include="AddItems\AddDesktop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddDishwasher.xaml">
+    <Page Include="AddItems\AddDishwasher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddDryingMachine.xaml">
+    <Page Include="AddItems\AddDryingMachine.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddFreezer.xaml">
+    <Page Include="AddItems\AddFreezer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddFridge.xaml">
+    <Page Include="AddItems\AddFridge.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddLaptop.xaml">
+    <Page Include="AddItems\AddLaptop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddMicrowave.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddOven.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddRegular.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddSmart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddTablet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddWashingMachine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddWire.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddWireless.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,29 +123,53 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AddAirConditioner.xaml.cs">
+    <Compile Include="AddItems\AddAirConditioner.xaml.cs">
       <DependentUpon>AddAirConditioner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddCooker.xaml.cs">
+    <Compile Include="AddItems\AddCooker.xaml.cs">
       <DependentUpon>AddCooker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddDesktop.xaml.cs">
+    <Compile Include="AddItems\AddDesktop.xaml.cs">
       <DependentUpon>AddDesktop.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddDishwasher.xaml.cs">
+    <Compile Include="AddItems\AddDishwasher.xaml.cs">
       <DependentUpon>AddDishwasher.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddDryingMachine.xaml.cs">
+    <Compile Include="AddItems\AddDryingMachine.xaml.cs">
       <DependentUpon>AddDryingMachine.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddFreezer.xaml.cs">
+    <Compile Include="AddItems\AddFreezer.xaml.cs">
       <DependentUpon>AddFreezer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddFridge.xaml.cs">
+    <Compile Include="AddItems\AddFridge.xaml.cs">
       <DependentUpon>AddFridge.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddLaptop.xaml.cs">
+    <Compile Include="AddItems\AddLaptop.xaml.cs">
       <DependentUpon>AddLaptop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddMicrowave.xaml.cs">
+      <DependentUpon>AddMicrowave.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddOven.xaml.cs">
+      <DependentUpon>AddOven.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddRegular.xaml.cs">
+      <DependentUpon>AddRegular.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddSmart.xaml.cs">
+      <DependentUpon>AddSmart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddTablet.xaml.cs">
+      <DependentUpon>AddTablet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddWashingMachine.xaml.cs">
+      <DependentUpon>AddWashingMachine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddWire.xaml.cs">
+      <DependentUpon>AddWire.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddItems\AddWireless.xaml.cs">
+      <DependentUpon>AddWireless.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -150,6 +206,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DeleteItems\" />
+    <Folder Include="ReadItems\" />
+    <Folder Include="UpdateItems\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

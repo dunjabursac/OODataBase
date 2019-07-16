@@ -7,8 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550" Width="400">
     <Grid Background="AliceBlue">
-
-        <Button Width="200" Height="50" FontSize="16" Click="Button_Click">Add laptop</Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Button Grid.Row="1" Width="200" Height="50" FontSize="16" Click="Button_Click">Add Item</Button>
+        <ComboBox Grid.Row="0" HorizontalAlignment="Center" Name="comboBox_Items" VerticalAlignment="Center" ItemsSource="{Binding Items}" Width="120"/>
 
     </Grid>
 </Window>
