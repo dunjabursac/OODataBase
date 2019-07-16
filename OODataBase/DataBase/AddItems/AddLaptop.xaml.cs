@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace DataBase.AddItems
 {
     /// <summary>
-    /// Interaction logic for AddCooker.xaml
+    /// Interaction logic for AddLaptop.xaml
     /// </summary>
-    public partial class AddCooker : Window
+    public partial class AddLaptop : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddCooker(Dictionary<string, Dictionary<int, object>> tables)
+        public AddLaptop(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,23 +31,26 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Cooker cooker = new Cooker()
+            Laptop laptop = new Laptop()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                MaxTemperature = Convert.ToInt32(maxTemperature.Text),
-                EnergyClass = energyClass.Text,
-                PanelType = panelType.Text,
-                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
+                RAM = Convert.ToInt32(ram.Text),
+                ROM = Convert.ToInt32(rom.Text),
+                Processor = processor.Text,
+                KeyboardType = keyboardType.Text,
+                BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
+                ScreenSize = Convert.ToInt32(screenSize.Text),
+                Resolution = resolution.Text
             };
 
-            Tables["Cooker"].Add(Tables["Cooker"].Count, cooker);
+            Tables["Laptop"].Add(Tables["Laptop"].Count, laptop);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Cooker));
+            XmlSerializer xs = new XmlSerializer(typeof(Laptop));
 
-            TextWriter txtWriter = new StreamWriter("Cooker.xml", true);
+            TextWriter txtWriter = new StreamWriter("Laptop.xml", true);
 
-            xs.Serialize(txtWriter, cooker);
+            xs.Serialize(txtWriter, laptop);
 
             txtWriter.Close();
 

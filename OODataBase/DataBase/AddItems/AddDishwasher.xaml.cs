@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace DataBase.AddItems
 {
     /// <summary>
-    /// Interaction logic for AddDesktop.xaml
+    /// Interaction logic for AddDishwasher.xaml
     /// </summary>
-    public partial class AddDesktop : Window
+    public partial class AddDishwasher : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddDesktop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddDishwasher(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,24 +31,23 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Desktop desktop = new Desktop()
+            Dishwasher dishwasher = new Dishwasher()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                RAM = Convert.ToInt32(ram.Text),
-                ROM = Convert.ToInt32(rom.Text),
-                Processor = processor.Text,
-                Type = type.Text,
-                PowerSupply = Convert.ToInt32(powerSupply.Text)
+                NumberOfLevels = Convert.ToInt32(numberOfLevels.Text),
+                EnergyClass = energyClass.Text,
+                Volume = Convert.ToInt32(volume.Text),
+                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Desktop"].Add(Tables["Desktop"].Count, desktop);
+            Tables["Dishwasher"].Add(Tables["Dishwasher"].Count, dishwasher);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Desktop));
+            XmlSerializer xs = new XmlSerializer(typeof(Dishwasher));
 
-            TextWriter txtWriter = new StreamWriter("Desktop.xml", true);
+            TextWriter txtWriter = new StreamWriter("Dishwasher.xml", true);
 
-            xs.Serialize(txtWriter, desktop);
+            xs.Serialize(txtWriter, dishwasher);
 
             txtWriter.Close();
 

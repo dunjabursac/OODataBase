@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace DataBase.AddItems
 {
     /// <summary>
-    /// Interaction logic for AddFreezer.xaml
+    /// Interaction logic for AddCooker.xaml
     /// </summary>
-    public partial class AddFreezer : Window
+    public partial class AddCooker : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddFreezer(Dictionary<string, Dictionary<int, object>> tables)
+        public AddCooker(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,23 +31,23 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Freezer freezer = new Freezer()
+            Cooker cooker = new Cooker()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                MinCoolingTemperature = Convert.ToInt32(minCoolingTemperature.Text),
+                MaxTemperature = Convert.ToInt32(maxTemperature.Text),
                 EnergyClass = energyClass.Text,
-                Volume = Convert.ToInt32(volume.Text),
-                NoiseLevel = Convert.ToInt32(noiseLevel.Text)
+                PanelType = panelType.Text,
+                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Freezer"].Add(Tables["Freezer"].Count, freezer);
+            Tables["Cooker"].Add(Tables["Cooker"].Count, cooker);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Freezer));
+            XmlSerializer xs = new XmlSerializer(typeof(Cooker));
 
-            TextWriter txtWriter = new StreamWriter("Freezer.xml", true);
+            TextWriter txtWriter = new StreamWriter("Cooker.xml", true);
 
-            xs.Serialize(txtWriter, freezer);
+            xs.Serialize(txtWriter, cooker);
 
             txtWriter.Close();
 

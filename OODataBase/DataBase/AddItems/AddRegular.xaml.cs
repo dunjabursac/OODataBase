@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace DataBase.AddItems
 {
     /// <summary>
-    /// Interaction logic for AddDishwasher.xaml
+    /// Interaction logic for AddRegular.xaml
     /// </summary>
-    public partial class AddDishwasher : Window
+    public partial class AddRegular : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddDishwasher(Dictionary<string, Dictionary<int, object>> tables)
+        public AddRegular(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,23 +31,26 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Dishwasher dishwasher = new Dishwasher()
+            Regular regular = new Regular()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                NumberOfLevels = Convert.ToInt32(numberOfLevels.Text),
-                EnergyClass = energyClass.Text,
-                Volume = Convert.ToInt32(volume.Text),
-                NoiseLevel = Convert.ToInt32(noiseLevel.Text),
+                RAM = Convert.ToInt32(ram.Text),
+                MicrophoneSensitivity = microphoneSensitivity.Text,
+                ROM = Convert.ToInt32(rom.Text),
+                OS = os.Text,
+                Resolution = resolution.Text,
+                ScreenSize = Convert.ToInt32(screenSize.Text),
+                SpeakerVolume = Convert.ToInt32(speakerVolume.Text),
             };
 
-            Tables["Dishwasher"].Add(Tables["Dishwasher"].Count, dishwasher);
+            Tables["Regular"].Add(Tables["Regular"].Count, regular);
 
-            XmlSerializer xs = new XmlSerializer(typeof(Dishwasher));
+            XmlSerializer xs = new XmlSerializer(typeof(Regular));
 
-            TextWriter txtWriter = new StreamWriter("Dishwasher.xml", true);
+            TextWriter txtWriter = new StreamWriter("Regular.xml", true);
 
-            xs.Serialize(txtWriter, dishwasher);
+            xs.Serialize(txtWriter, regular);
 
             txtWriter.Close();
 

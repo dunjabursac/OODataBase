@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace DataBase.AddItems
 {
     /// <summary>
-    /// Interaction logic for AddDryingMachine.xaml
+    /// Interaction logic for AddOven.xaml
     /// </summary>
-    public partial class AddDryingMachine : Window
+    public partial class AddOven : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
-        public AddDryingMachine(Dictionary<string, Dictionary<int, object>> tables)
+        public AddOven(Dictionary<string, Dictionary<int, object>> tables)
         {
             Tables = tables;
             InitializeComponent();
@@ -31,24 +31,23 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DryingMachine dryingMachine = new DryingMachine()
+            Oven oven = new Oven()
             {
                 Price = Convert.ToInt32(price.Text),
                 Brand = brand.Text,
-                TubDiameter = Convert.ToInt32(tubDiameter.Text),
+                MaxTemperature = Convert.ToInt32(maxTemperature.Text),
                 EnergyClass = energyClass.Text,
                 Volume = Convert.ToInt32(volume.Text),
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text),
-                DryingMode = dryingMode.Text
             };
 
-            Tables["DryingMachine"].Add(Tables["DryingMachine"].Count, dryingMachine);
+            Tables["Oven"].Add(Tables["Oven"].Count, oven);
 
-            XmlSerializer xs = new XmlSerializer(typeof(DryingMachine));
+            XmlSerializer xs = new XmlSerializer(typeof(Oven));
 
-            TextWriter txtWriter = new StreamWriter("DryingMachine.xml", true);
+            TextWriter txtWriter = new StreamWriter("Oven.xml", true);
 
-            xs.Serialize(txtWriter, dryingMachine);
+            xs.Serialize(txtWriter, oven);
 
             txtWriter.Close();
 

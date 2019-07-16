@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DataBase.AddItems;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,13 +27,13 @@ namespace DataBase
     public partial class MainWindow : Window
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
+        public List<string> Items { get; set; }
 
         public static Dictionary<string, List<string>> ParentChildren;
 
 
         public MainWindow()
         {
-            InitializeComponent();
 
             Tables = new Dictionary<string, Dictionary<int, object>>();
 
@@ -108,6 +110,10 @@ namespace DataBase
                     continue;
                 }
             }
+
+            Items = new List<string>(Tables.Keys);
+            DataContext = this;
+            InitializeComponent();
         }
 
         static void ValidationCallback(object sender, ValidationEventArgs args)
@@ -122,7 +128,10 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            AddFridge addLaptop = new AddFridge(Tables);
+            string selected = comboBox_Items.SelectedItem.ToString();
+
+            Type t = Type.GetType("DataBase.AddItems.Add" + selected);
+            var addLaptop = (Window)Activator.CreateInstance(t, Tables);
             addLaptop.Show();
         }
 
