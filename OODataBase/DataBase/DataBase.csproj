@@ -55,7 +55,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+<<<<<<< HEAD
     <Page Include="AddItems\AddAirConditioner.xaml">
+=======
+    <Compile Include="SelectItems.xaml.cs">
+      <DependentUpon>SelectItems.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AddAirConditioner.xaml">
+>>>>>>> f47a08469556c142230b09105005c016e017d48f
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -179,6 +186,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SelectItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model.cs" />

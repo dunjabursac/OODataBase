@@ -95,5 +95,11 @@ namespace DataBase
             var addLaptop = (Window)Activator.CreateInstance(t, Tables);
             addLaptop.Show();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            SelectItems selectItems = new SelectItems(Tables);
+            selectItems.Show();
+        }
     }
 }
