@@ -26,5 +26,15 @@ namespace DataBase
             Tables = tables;
             InitializeComponent();
         }
+
+        private void Area_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // popunjavas Categories
+        }
+
+        private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

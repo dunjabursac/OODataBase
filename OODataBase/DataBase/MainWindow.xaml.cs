@@ -26,11 +26,17 @@ namespace DataBase
     {
         public static Dictionary<string, Dictionary<int, object>> Tables;
 
+        public static Dictionary<string, List<string>> ParentChildren;
+
+
         public MainWindow()
         {
             InitializeComponent();
 
             Tables = new Dictionary<string, Dictionary<int, object>>();
+
+            ParentChildren = new Dictionary<string, List<string>>();
+            ParentChildren.Add("Item", new List<string>());
 
             XmlSchema myschema;
 
@@ -63,9 +69,42 @@ namespace DataBase
                         }
                     }
                 }
-                catch(Exception e)
+                catch(Exception e1)
                 {
-                    Console.WriteLine("Error:" + e.Message);
+                    // ucitavanje klasa iz XSD-a koje nisu listovi
+
+                    try
+                    {
+                        string currwntClassName = ((XmlSchemaComplexType)myschema.Items[i]).Name;
+
+                        Type type = Type.GetType($"DataBase.{currwntClassName}");
+                        if (type != null && type.Name != "Item")
+                        {
+                            var currentClassInstance = Activator.CreateInstance(type);
+                            var currentClassParentInstance = currentClassInstance.GetType().BaseType;//.GetGenericArguments()[0];
+                            string currentClassParentName = currentClassParentInstance.Name;
+
+                            if (ParentChildren.ContainsKey(currentClassParentName))
+                            {
+                                ParentChildren[currentClassParentName].Add(currwntClassName);
+                            }
+                            else
+                            {
+                                ParentChildren.Add(currentClassParentName, new List<string>());
+                                ParentChildren[currentClassParentName].Add(currwntClassName);
+                            }
+                        }
+
+                        
+                    }
+                    catch(Exception e2)
+                    {
+                        Console.WriteLine("Error:" + e2.Message);
+                        continue;
+                    }
+
+
+                    Console.WriteLine("Error:" + e1.Message);
                     continue;
                 }
             }
@@ -89,6 +128,8 @@ namespace DataBase
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            // prosledi SelectItem-u liste area, category, option
+
             SelectItems selectItems = new SelectItems(Tables);
             selectItems.Show();
         }
