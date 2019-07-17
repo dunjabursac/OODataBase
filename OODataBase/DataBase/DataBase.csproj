@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DBManager.cs" />
     <Compile Include="SelectItems.xaml.cs">
       <DependentUpon>SelectItems.xaml</DependentUpon>
     </Compile>
