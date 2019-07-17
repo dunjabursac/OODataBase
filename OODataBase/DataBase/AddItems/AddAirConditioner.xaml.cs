@@ -21,11 +21,10 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddAirConditioner : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
-
-        public AddAirConditioner(Dictionary<string, Dictionary<int, object>> tables)
+        DBManager DB;
+        public AddAirConditioner(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +40,7 @@ namespace DataBase.AddItems
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["AirConditioner"].Add(Tables["AirConditioner"].Count, airConditioner);
-
-            XmlSerializer xs = new XmlSerializer(typeof(AirConditioner));
-
-            TextWriter txtWriter = new StreamWriter("AirConditioner.xml", true);
-
-            xs.Serialize(txtWriter, airConditioner);
-
-            txtWriter.Close();
+            DB.Create("AirConditioner", airConditioner);
 
             this.Close();
         }

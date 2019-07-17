@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddCooker : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddCooker(Dictionary<string, Dictionary<int, object>> tables)
+        public AddCooker(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +41,7 @@ namespace DataBase.AddItems
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Cooker"].Add(Tables["Cooker"].Count, cooker);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Cooker));
-
-            TextWriter txtWriter = new StreamWriter("Cooker.xml", true);
-
-            xs.Serialize(txtWriter, cooker);
-
-            txtWriter.Close();
+            DB.Create("Cooker", cooker);
 
             this.Close();
         }

@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddRegular : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddRegular(Dictionary<string, Dictionary<int, object>> tables)
+        public AddRegular(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -44,15 +44,7 @@ namespace DataBase.AddItems
                 SpeakerVolume = Convert.ToInt32(speakerVolume.Text),
             };
 
-            Tables["Regular"].Add(Tables["Regular"].Count, regular);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Regular));
-
-            TextWriter txtWriter = new StreamWriter("Regular.xml", true);
-
-            xs.Serialize(txtWriter, regular);
-
-            txtWriter.Close();
+            DB.Create("Regular", regular);
 
             this.Close();
         }

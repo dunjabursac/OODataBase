@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddOven : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddOven(Dictionary<string, Dictionary<int, object>> tables)
+        public AddOven(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +41,7 @@ namespace DataBase.AddItems
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Oven"].Add(Tables["Oven"].Count, oven);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Oven));
-
-            TextWriter txtWriter = new StreamWriter("Oven.xml", true);
-
-            xs.Serialize(txtWriter, oven);
-
-            txtWriter.Close();
+            DB.Create("Oven", oven);
 
             this.Close();
         }

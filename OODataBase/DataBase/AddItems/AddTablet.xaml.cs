@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddTablet : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddTablet(Dictionary<string, Dictionary<int, object>> tables)
+        public AddTablet(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -43,15 +43,7 @@ namespace DataBase.AddItems
                 Resolution = resolution.Text
             };
 
-            Tables["Tablet"].Add(Tables["Tablet"].Count, tablet);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Tablet));
-
-            TextWriter txtWriter = new StreamWriter("Tablet.xml", true);
-
-            xs.Serialize(txtWriter, tablet);
-
-            txtWriter.Close();
+            DB.Create("Tablet", tablet);
 
             this.Close();
         }

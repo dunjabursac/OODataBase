@@ -11,12 +11,14 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <ComboBox Grid.Row="0" HorizontalAlignment="Center" Name="comboBox_Items" VerticalAlignment="Center" Width="120"/>
+        
+        <ComboBox Grid.Row="0" HorizontalAlignment="Center" Name="comboBox_Items" VerticalAlignment="Center" ItemsSource="{Binding Items}" Width="120"/>
         <Button Grid.Row="1" Width="200" Height="50" FontSize="16" Click="Button_Click">Add Item</Button>
-
-        <Button Grid.Row="2" Width="200" Height="50" FontSize="16" Click="Button_Click_1">Select Item</Button>
+        <Button Grid.Row="2" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Bottom" Width="200" Click="Button_Click_2">Delete Item</Button>
+        <Button Grid.Row="3" Width="200" Height="50" FontSize="16" Click="Button_Click_1">Select Item</Button>
         
     </Grid>
 </Window>

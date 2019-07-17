@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddWire : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddWire(Dictionary<string, Dictionary<int, object>> tables)
+        public AddWire(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -40,15 +40,7 @@ namespace DataBase.AddItems
                 CableLength = Convert.ToInt32(cableLength.Text)
             };
 
-            Tables["Wire"].Add(Tables["Wire"].Count, wire);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Wire));
-
-            TextWriter txtWriter = new StreamWriter("Wire.xml", true);
-
-            xs.Serialize(txtWriter, wire);
-
-            txtWriter.Close();
+            DB.Create("Wire", wire);
 
             this.Close();
         }

@@ -1,4 +1,5 @@
 ﻿using DataBase.AddItems;
+using DataBase.DeleteItems;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,18 +33,18 @@ namespace DataBase
 
         public MainWindow()
         {
-            //Items = db.GetLeavesName();
+            Items = db.GetLeavesName();
             DataContext = this;
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //string selected = comboBox_Items.SelectedItem.ToString();
+            string selected = comboBox_Items.SelectedItem.ToString();
 
-            //Type t = Type.GetType("DataBase.AddItems.Add" + selected);
-            //var addLaptop = (Window)Activator.CreateInstance(t, Tables);
-            //addLaptop.Show();
+            Type t = Type.GetType("DataBase.AddItems.Add" + selected);
+            var addLaptop = (Window)Activator.CreateInstance(t, db);
+            addLaptop.Show();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -54,6 +55,12 @@ namespace DataBase
 
             SelectItems selectItems = new SelectItems(db);
             selectItems.Show();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            DeleteItem di = new DeleteItem(db);
+            di.Show();
         }
     }
 }

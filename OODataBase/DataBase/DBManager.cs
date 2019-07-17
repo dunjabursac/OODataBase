@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace DataBase
 {
@@ -19,7 +20,7 @@ namespace DataBase
             CreateTables();
         }
 
-        public void CreateTables()
+        private void CreateTables()
         {
             Tables = new Dictionary<string, Dictionary<int, object>>();
 
@@ -134,6 +135,28 @@ namespace DataBase
         public Dictionary<string, List<string>> GetParentChildren()
         {
             return ParentChildren;
+        public List<string> GetLeavesName()
+        {
+            return new List<string>(Tables.Keys);
+        }
+
+        public bool Create(string name, object item)
+        {
+            bool ret = false;
+
+            Tables[name].Add(Tables[name].Count, item);
+
+            Type t = Type.GetType("DataBase." + name);
+
+            XmlSerializer xs = new XmlSerializer(t);
+
+            TextWriter txtWriter = new StreamWriter(name + ".xml", true);
+
+            xs.Serialize(txtWriter, item);
+
+            txtWriter.Close();
+
+            return ret;
         }
     }
 }

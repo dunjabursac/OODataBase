@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddDesktop : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddDesktop(Dictionary<string, Dictionary<int, object>> tables)
+        public AddDesktop(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -42,15 +42,7 @@ namespace DataBase.AddItems
                 PowerSupply = Convert.ToInt32(powerSupply.Text)
             };
 
-            Tables["Desktop"].Add(Tables["Desktop"].Count, desktop);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Desktop));
-
-            TextWriter txtWriter = new StreamWriter("Desktop.xml", true);
-
-            xs.Serialize(txtWriter, desktop);
-
-            txtWriter.Close();
+            DB.Create("Desktop", desktop);
 
             this.Close();
         }

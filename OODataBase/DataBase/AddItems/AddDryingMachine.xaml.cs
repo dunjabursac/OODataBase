@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddDryingMachine : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddDryingMachine(Dictionary<string, Dictionary<int, object>> tables)
+        public AddDryingMachine(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -42,15 +42,7 @@ namespace DataBase.AddItems
                 DryingMode = dryingMode.Text
             };
 
-            Tables["DryingMachine"].Add(Tables["DryingMachine"].Count, dryingMachine);
-
-            XmlSerializer xs = new XmlSerializer(typeof(DryingMachine));
-
-            TextWriter txtWriter = new StreamWriter("DryingMachine.xml", true);
-
-            xs.Serialize(txtWriter, dryingMachine);
-
-            txtWriter.Close();
+            DB.Create("DryingMachine", dryingMachine);
 
             this.Close();
         }

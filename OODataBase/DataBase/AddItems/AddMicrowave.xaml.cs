@@ -21,10 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddMicrowave : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
-        public AddMicrowave(Dictionary<string, Dictionary<int, object>> tables)
+        DBManager DB;
+
+        public AddMicrowave(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +42,7 @@ namespace DataBase.AddItems
                 Volume = Convert.ToInt32(volume.Text)
             };
 
-            Tables["Microwave"].Add(Tables["Microwave"].Count, microwave);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Microwave));
-
-            TextWriter txtWriter = new StreamWriter("Microwave.xml", true);
-
-            xs.Serialize(txtWriter, microwave);
-
-            txtWriter.Close();
+            DB.Create("Microwave", microwave);
 
             this.Close();
         }

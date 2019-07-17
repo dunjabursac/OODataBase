@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddWireless : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddWireless(Dictionary<string, Dictionary<int, object>> tables)
+        public AddWireless(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +41,7 @@ namespace DataBase.AddItems
                 Range = Convert.ToInt32(range.Text)
             };
 
-            Tables["Wireless"].Add(Tables["Wireless"].Count, wireless);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Wireless));
-
-            TextWriter txtWriter = new StreamWriter("Wireless.xml", true);
-
-            xs.Serialize(txtWriter, wireless);
-
-            txtWriter.Close();
+            DB.Create("Wireless", wireless);
 
             this.Close();
         }
