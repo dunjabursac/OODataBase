@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddSmart : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddSmart(Dictionary<string, Dictionary<int, object>> tables)
+        public AddSmart(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -45,15 +45,7 @@ namespace DataBase.AddItems
                 WiFiType = wiFiType.Text,
             };
 
-            Tables["Smart"].Add(Tables["Smart"].Count, smart);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Smart));
-
-            TextWriter txtWriter = new StreamWriter("Smart.xml", true);
-
-            xs.Serialize(txtWriter, smart);
-
-            txtWriter.Close();
+            DB.Create("Smart", smart);
 
             this.Close();
         }

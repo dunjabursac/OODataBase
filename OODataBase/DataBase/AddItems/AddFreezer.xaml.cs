@@ -21,14 +21,13 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddFreezer : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddFreezer(Dictionary<string, Dictionary<int, object>> tables)
+        public AddFreezer(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Freezer freezer = new Freezer()
@@ -41,15 +40,7 @@ namespace DataBase.AddItems
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text)
             };
 
-            Tables["Freezer"].Add(Tables["Freezer"].Count, freezer);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Freezer));
-
-            TextWriter txtWriter = new StreamWriter("Freezer.xml", true);
-
-            xs.Serialize(txtWriter, freezer);
-
-            txtWriter.Close();
+            DB.Create("Freezer", freezer);
 
             this.Close();
         }

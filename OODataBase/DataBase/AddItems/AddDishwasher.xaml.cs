@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddDishwasher : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddDishwasher(Dictionary<string, Dictionary<int, object>> tables)
+        public AddDishwasher(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +41,7 @@ namespace DataBase.AddItems
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["Dishwasher"].Add(Tables["Dishwasher"].Count, dishwasher);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Dishwasher));
-
-            TextWriter txtWriter = new StreamWriter("Dishwasher.xml", true);
-
-            xs.Serialize(txtWriter, dishwasher);
-
-            txtWriter.Close();
+            DB.Create("Dishwasher", dishwasher);
 
             this.Close();
         }

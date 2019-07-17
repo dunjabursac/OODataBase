@@ -56,6 +56,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DBManager.cs" />
+    <Compile Include="DeleteItems\DeleteItem.xaml.cs">
+      <DependentUpon>DeleteItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SelectItems.xaml.cs">
       <DependentUpon>SelectItems.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AddItems\AddWireless.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeleteItems\DeleteItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -216,7 +223,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DeleteItems\" />
     <Folder Include="ReadItems\" />
     <Folder Include="UpdateItems\" />
   </ItemGroup>

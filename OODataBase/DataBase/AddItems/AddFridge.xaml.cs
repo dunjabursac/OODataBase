@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddFridge : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddFridge(Dictionary<string, Dictionary<int, object>> tables)
+        public AddFridge(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -42,15 +42,7 @@ namespace DataBase.AddItems
                 Type = type.Text
             };
 
-            Tables["Fridge"].Add(Tables["Fridge"].Count, fridge);
-
-            XmlSerializer xs = new XmlSerializer(typeof(Fridge));
-
-            TextWriter txtWriter = new StreamWriter("Fridge.xml", true);
-
-            xs.Serialize(txtWriter, fridge);
-
-            txtWriter.Close();
+            DB.Create("Fridge", fridge);
 
             this.Close();
         }

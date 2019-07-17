@@ -35,18 +35,18 @@ namespace DataBase
 
         public MainWindow()
         {
-            //Items = new List<string>(Tables.Keys);
+            Items = db.GetLeavesName();
             DataContext = this;
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //string selected = comboBox_Items.SelectedItem.ToString();
+            string selected = comboBox_Items.SelectedItem.ToString();
 
-            //Type t = Type.GetType("DataBase.AddItems.Add" + selected);
-            //var addLaptop = (Window)Activator.CreateInstance(t, Tables);
-            //addLaptop.Show();
+            Type t = Type.GetType("DataBase.AddItems.Add" + selected);
+            var addLaptop = (Window)Activator.CreateInstance(t, db);
+            addLaptop.Show();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -21,11 +21,11 @@ namespace DataBase.AddItems
     /// </summary>
     public partial class AddWashingMachine : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
+        DBManager DB;
 
-        public AddWashingMachine(Dictionary<string, Dictionary<int, object>> tables)
+        public AddWashingMachine(DBManager db)
         {
-            Tables = tables;
+            DB = db;
             InitializeComponent();
         }
 
@@ -41,15 +41,7 @@ namespace DataBase.AddItems
                 NoiseLevel = Convert.ToInt32(noiseLevel.Text),
             };
 
-            Tables["WashingMachine"].Add(Tables["WashingMachine"].Count, washingMachine);
-
-            XmlSerializer xs = new XmlSerializer(typeof(WashingMachine));
-
-            TextWriter txtWriter = new StreamWriter("WashingMachine.xml", true);
-
-            xs.Serialize(txtWriter, washingMachine);
-
-            txtWriter.Close();
+            DB.Create("WashingMachine", washingMachine);
 
             this.Close();
         }
