@@ -62,6 +62,36 @@
     <Compile Include="SelectItems.xaml.cs">
       <DependentUpon>SelectItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Select\SAppliances.xaml.cs">
+      <DependentUpon>SAppliances.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SArea.xaml.cs">
+      <DependentUpon>SArea.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SComputer.xaml.cs">
+      <DependentUpon>SComputer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SCooking.xaml.cs">
+      <DependentUpon>SCooking.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SCoolingDevice.xaml.cs">
+      <DependentUpon>SCoolingDevice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SItem.xaml.cs">
+      <DependentUpon>SItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SLandline.xaml.cs">
+      <DependentUpon>SLandline.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SMachine.xaml.cs">
+      <DependentUpon>SMachine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SMobile.xaml.cs">
+      <DependentUpon>SMobile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Select\SPhone.xaml.cs">
+      <DependentUpon>SPhone.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddItems\AddAirConditioner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,6 +221,46 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SelectItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SAppliances.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SArea.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SComputer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SCooking.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SCoolingDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SLandline.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SMachine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SMobile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\SPhone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

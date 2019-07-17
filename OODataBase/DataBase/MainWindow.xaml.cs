@@ -49,10 +49,6 @@ namespace DataBase
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            // prosledi SelectItem-u liste dictionary ParentChildren
-
-
-
             SelectItems selectItems = new SelectItems(db);
             selectItems.Show();
         }
