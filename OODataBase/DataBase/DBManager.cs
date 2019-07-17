@@ -97,6 +97,35 @@ namespace DataBase
                     continue;
                 }
             }
+
+            foreach (var item in Tables)
+            {
+                using (var xml = new XmlTextReader(item.Key + ".xml"))
+                {
+                    Type t2 = Type.GetType("DataBase." + item.Key);
+                    XmlSerializer xd = new XmlSerializer(t2);
+                    try
+                    {
+                        xml.ReadStartElement("wrapper"); // skip the wrapper
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    object obj;
+                    int i = 0;
+
+                    while (true)
+                    {
+                        obj = (object)xd.Deserialize(xml);
+                        if (obj == null)
+                            break;
+                        xml.Read();
+                        Tables[item.Key].Add(i, obj);
+                        i++;
+                    }
+                }
+            }
         }
 
         static void ValidationCallback(object sender, ValidationEventArgs args)
@@ -135,6 +164,8 @@ namespace DataBase
         public Dictionary<string, List<string>> GetParentChildren()
         {
             return ParentChildren;
+        }
+
         public List<string> GetLeavesName()
         {
             return new List<string>(Tables.Keys);
@@ -143,18 +174,55 @@ namespace DataBase
         public bool Create(string name, object item)
         {
             bool ret = false;
+            string filename = name + ".xml";
+            const string wrapperTagName = "wrapper";
+            string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
+            string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
 
-            Tables[name].Add(Tables[name].Count, item);
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+            {
+                XmlWriter xml = null;
+                Type t = Type.GetType("DataBase." + name);
+                var serializer = new XmlSerializer(t);
+                if (stream.Length == 0)
+                {
+                    xml = XmlWriter.Create(stream);
+                    xml.WriteStartDocument();
+                    xml.WriteRaw(wrapperStartTag);
+                }
+                else
+                {
+                    xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
+                    var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
+                    var buffer = new byte[bufferLength];
+                    stream.Position = stream.Length - bufferLength;
+                    stream.Read(buffer, 0, bufferLength);
+                    if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
+                    {
+                        throw new Exception("Invalid file");
+                    }
+                    else
+                    {
+                        stream.SetLength(stream.Length - bufferLength);
+                    }
+                }
 
-            Type t = Type.GetType("DataBase." + name);
+                serializer.Serialize(xml, item);
+                xml.WriteRaw(wrapperEndTag);
+                xml.Close();
+            }
 
-            XmlSerializer xs = new XmlSerializer(t);
+            //Tables[name].Add(Tables[name].Count, item);
 
-            TextWriter txtWriter = new StreamWriter(name + ".xml", true);
+            //Type t = Type.GetType("DataBase." + name);
 
-            xs.Serialize(txtWriter, item);
+            //XmlSerializer xs = new XmlSerializer(t);
 
-            txtWriter.Close();
+            //TextWriter txtWriter = new StreamWriter(name + ".xml", true);
+
+            //xs.Serialize(txtWriter, item);
+
+            //txtWriter.Close();
 
             return ret;
         }
