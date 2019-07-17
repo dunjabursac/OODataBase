@@ -26,16 +26,13 @@ namespace DataBase
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
         public List<string> Items { get; set; }
-
-        public static Dictionary<string, List<string>> ParentChildren;
 
         public DBManager db = new DBManager();
 
         public MainWindow()
         {
-            //Items = new List<string>(Tables.Keys);
+            //Items = db.GetLeavesName();
             DataContext = this;
             InitializeComponent();
         }
@@ -51,10 +48,12 @@ namespace DataBase
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            // prosledi SelectItem-u liste area, category, option
+            // prosledi SelectItem-u liste dictionary ParentChildren
 
-            //SelectItems selectItems = new SelectItems(Tables);
-            //selectItems.Show();
+
+
+            SelectItems selectItems = new SelectItems(db);
+            selectItems.Show();
         }
     }
 }

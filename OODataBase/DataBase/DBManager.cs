@@ -107,5 +107,33 @@ namespace DataBase
 
             Console.WriteLine(args.Message);
         }
+
+        public List<string> GetAllClassNames()
+        {
+            List<string> allClassNames = new List<string>();
+
+            foreach(var cn in ParentChildren)
+            {
+                if(!allClassNames.Contains(cn.Key))
+                {
+                    allClassNames.Add(cn.Key);
+                }
+
+                foreach(var currentChild in cn.Value)
+                {
+                    if(!allClassNames.Contains(currentChild))
+                    {
+                        allClassNames.Add(currentChild);
+                    }
+                }
+            }
+
+            return allClassNames;
+        }
+
+        public Dictionary<string, List<string>> GetParentChildren()
+        {
+            return ParentChildren;
+        }
     }
 }

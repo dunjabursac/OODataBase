@@ -31,11 +31,11 @@
         <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Category</Label>
         <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Option</Label>
 
-        <ComboBox Grid.Row="2" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="area" SelectionChanged="Area_SelectionChanged"></ComboBox>
-        <ComboBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="category" SelectionChanged="Category_SelectionChanged"></ComboBox>
-        <ComboBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="optiom"></ComboBox>
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="area" SelectionChanged="Area_SelectionChanged" ItemsSource="{Binding Areas}" />
+        <ComboBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="category" SelectionChanged="Category_SelectionChanged" ItemsSource="{Binding Categories}" />
+        <ComboBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="optiom" ItemsSource="{Binding Options}" />
 
-        <Button Grid.Row="8" Grid.ColumnSpan="2" Width="200" FontSize="16" Margin="97,0,96.6,39.8" Grid.RowSpan="2">Select</Button>
+        <Button Grid.Row="8" Grid.ColumnSpan="2" Width="100" FontSize="16" Margin="97,0,96.6,39.8" Grid.RowSpan="2" Click="Button_Click">Select</Button>
 
     </Grid>
 </Window>
