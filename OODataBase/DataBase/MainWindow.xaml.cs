@@ -1,4 +1,5 @@
 ﻿using DataBase.AddItems;
+using DataBase.DeleteItems;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,6 +56,12 @@ namespace DataBase
 
             //SelectItems selectItems = new SelectItems(Tables);
             //selectItems.Show();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            DeleteItem di = new DeleteItem(db);
+            di.Show();
         }
     }
 }

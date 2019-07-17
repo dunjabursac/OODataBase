@@ -19,8 +19,13 @@ namespace DataBase.DeleteItems
     /// </summary>
     public partial class DeleteItem : Window
     {
-        public DeleteItem()
+        DBManager DB;
+        public List<string> Items { get; set; }
+        public DeleteItem(DBManager db)
         {
+            DB = db;
+            Items = DB.GetLeavesName();
+            DataContext = this;
             InitializeComponent();
         }
 
