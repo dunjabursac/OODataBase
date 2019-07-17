@@ -135,6 +135,8 @@ namespace DataBase
         public Dictionary<string, List<string>> GetParentChildren()
         {
             return ParentChildren;
+        }
+
         public List<string> GetLeavesName()
         {
             return new List<string>(Tables.Keys);
