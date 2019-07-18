@@ -1,5 +1,6 @@
 ﻿using DataBase.AddItems;
 using DataBase.DeleteItems;
+using DataBase.ReadItems;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,11 +41,21 @@ namespace DataBase
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string selected = comboBox_Items.SelectedItem.ToString();
+            if (comboBox_Items.SelectedItem == null)
+            {
+                MessageBoxResult result = MessageBox.Show("Type is not selected!",
+                                          "Information",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+            }
+            else
+            {
+                string selected = comboBox_Items.SelectedItem.ToString();
 
-            Type t = Type.GetType("DataBase.AddItems.Add" + selected);
-            var addLaptop = (Window)Activator.CreateInstance(t, db);
-            addLaptop.Show();
+                Type t = Type.GetType("DataBase.AddItems.Add" + selected);
+                var addItem = (Window)Activator.CreateInstance(t, db);
+                addItem.Show();
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -57,6 +68,12 @@ namespace DataBase
         {
             DeleteItem di = new DeleteItem(db);
             di.Show();
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            ReadItem ri = new ReadItem(db);
+            ri.Show();
         }
     }
 }

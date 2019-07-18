@@ -97,6 +97,35 @@ namespace DataBase
                     continue;
                 }
             }
+
+            foreach (var item in Tables)
+            {
+                using (var xml = new XmlTextReader(item.Key + ".xml"))
+                {
+                    Type t2 = Type.GetType("DataBase." + item.Key);
+                    XmlSerializer xd = new XmlSerializer(t2);
+                    try
+                    {
+                        xml.ReadStartElement("wrapper"); // skip the wrapper
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    object obj;
+                    int i = 0;
+
+                    while (true)
+                    {
+                        obj = (object)xd.Deserialize(xml);
+                        if (obj == null)
+                            break;
+                        xml.Read();
+                        Tables[item.Key].Add(i, obj);
+                        i++;
+                    }
+                }
+            }
         }
 
         static void ValidationCallback(object sender, ValidationEventArgs args)
@@ -145,18 +174,94 @@ namespace DataBase
         public bool Create(string name, object item)
         {
             bool ret = false;
+            string filename = name + ".xml";
+            const string wrapperTagName = "wrapper";
+            string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
+            string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
 
-            Tables[name].Add(Tables[name].Count, item);
+            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+            {
+                XmlWriter xml = null;
+                Type t = Type.GetType("DataBase." + name);
+                var serializer = new XmlSerializer(t);
+                if (stream.Length == 0)
+                {
+                    xml = XmlWriter.Create(stream);
+                    xml.WriteStartDocument();
+                    xml.WriteRaw(wrapperStartTag);
+                }
+                else
+                {
+                    xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
+                    var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
+                    var buffer = new byte[bufferLength];
+                    stream.Position = stream.Length - bufferLength;
+                    stream.Read(buffer, 0, bufferLength);
+                    if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
+                    {
+                        throw new Exception("Invalid file");
+                    }
+                    else
+                    {
+                        stream.SetLength(stream.Length - bufferLength);
+                    }
+                }
 
-            Type t = Type.GetType("DataBase." + name);
+                serializer.Serialize(xml, item);
+                xml.WriteRaw(wrapperEndTag);
+                xml.Close();
+            }
 
-            XmlSerializer xs = new XmlSerializer(t);
+            return ret;
+        }
 
-            TextWriter txtWriter = new StreamWriter(name + ".xml", true);
+        public bool Delete(string name, int id)
+        {
+            bool ret = true;
 
-            xs.Serialize(txtWriter, item);
+            if (!Tables.ContainsKey(name))
+            {
+                ret = false;
+            }
+            else if (!Tables[name].ContainsKey(id))
+            {
+                ret = false;
+            }
+            else
+            {
+                if (!Tables[name].Remove(id))
+                {
+                    ret = false;
+                }
+            }
 
-            txtWriter.Close();
+            StreamWriter streamWriter = new StreamWriter(name + ".xml");
+            streamWriter.Close();
+
+            foreach (var item in Tables[name])
+            {
+                Create(name, item.Value);
+            }
+
+            return ret;
+        }
+
+        public object Read(string name, int id)
+        {
+            object ret = new object();
+
+            if (!Tables.ContainsKey(name))
+            {
+                ret = null;
+            }
+            else if (!Tables[name].ContainsKey(id))
+            {
+                ret = null;
+            }
+            else
+            {
+                ret = (Tables[name])[id];
+            }
 
             return ret;
         }

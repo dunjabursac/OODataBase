@@ -12,16 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace DataBase.DeleteItems
+namespace DataBase.ReadItems
 {
     /// <summary>
-    /// Interaction logic for DeleteItem.xaml
+    /// Interaction logic for ReadItem.xaml
     /// </summary>
-    public partial class DeleteItem : Window
+    public partial class ReadItem : Window
     {
         DBManager DB;
         public List<string> Items { get; set; }
-        public DeleteItem(DBManager db)
+        public ReadItem(DBManager db)
         {
             DB = db;
             Items = DB.GetLeavesName();
@@ -49,20 +49,10 @@ namespace DataBase.DeleteItems
                 }
                 else
                 {
-                    if (DB.Delete(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text)))
+                    object obj = DB.Read(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text));
+                    if (obj == null)
                     {
-                        MessageBoxResult result = MessageBox.Show("Deleted successfully",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Information);
-                        if (result == MessageBoxResult.OK)
-                        {
-                            this.Close();
-                        }
-                    }
-                    else
-                    {
-                        MessageBoxResult result = MessageBox.Show("Unable to delete item!",
+                        MessageBoxResult result = MessageBox.Show("Unable to read item!",
                                                   "Information",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Error);
@@ -70,6 +60,11 @@ namespace DataBase.DeleteItems
                         {
                             id.Text = "";
                         }
+                    }
+                    else
+                    {
+                        ShowReturnedItem sri = new ShowReturnedItem(obj, comboBox_Items.SelectedItem.ToString());
+                        sri.Show();
                     }
                 }
             }
