@@ -31,9 +31,43 @@ namespace DataBase.ReadItems
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            object obj = DB.Read(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text));
-            ShowReturnedItem sri = new ShowReturnedItem(obj, comboBox_Items.SelectedItem.ToString());
-            sri.Show();
+            if (comboBox_Items.SelectedItem == null || id.Text == "")
+            {
+                MessageBoxResult result = MessageBox.Show("Type and ID are required!",
+                                          "Information",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+            }
+            else
+            {
+                if (!Int32.TryParse(id.Text, out int tmp))
+                {
+                    MessageBoxResult result = MessageBox.Show("ID must be a number!",
+                                          "Information",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                }
+                else
+                {
+                    object obj = DB.Read(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text));
+                    if (obj == null)
+                    {
+                        MessageBoxResult result = MessageBox.Show("Unable to read item!",
+                                                  "Information",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Error);
+                        if (result == MessageBoxResult.OK)
+                        {
+                            id.Text = "";
+                        }
+                    }
+                    else
+                    {
+                        ShowReturnedItem sri = new ShowReturnedItem(obj, comboBox_Items.SelectedItem.ToString());
+                        sri.Show();
+                    }
+                }
+            }
         }
     }
 }
