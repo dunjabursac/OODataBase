@@ -160,5 +160,20 @@ namespace DataBase
 
             return ret;
         }
+
+        public List<object> GetAllItems()
+        {
+            List<object> allItems = null;
+
+            foreach(var kvp1 in Tables)
+            {
+                foreach (var kvp2 in kvp1.Value)
+                {
+                    allItems.Add(kvp2);
+                }
+            }
+
+            return allItems;
+        }
     }
 }

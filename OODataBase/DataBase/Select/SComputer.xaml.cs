@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SComputer : Window
     {
-        public SComputer(string choosenType)
+        public SComputer(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

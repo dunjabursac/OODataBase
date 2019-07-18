@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SArea : Window
     {
-        public SArea(string choosenArea)
+        public SArea(DBManager db, string choosenType)
         {
             InitializeComponent();
         }
