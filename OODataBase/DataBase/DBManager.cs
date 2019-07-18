@@ -212,17 +212,56 @@ namespace DataBase
                 xml.Close();
             }
 
-            //Tables[name].Add(Tables[name].Count, item);
+            return ret;
+        }
 
-            //Type t = Type.GetType("DataBase." + name);
+        public bool Delete(string name, int id)
+        {
+            bool ret = true;
 
-            //XmlSerializer xs = new XmlSerializer(t);
+            if (!Tables.ContainsKey(name))
+            {
+                ret = false;
+            }
+            else if (!Tables[name].ContainsKey(id))
+            {
+                ret = false;
+            }
+            else
+            {
+                if (!Tables[name].Remove(id))
+                {
+                    ret = false;
+                }
+            }
 
-            //TextWriter txtWriter = new StreamWriter(name + ".xml", true);
+            StreamWriter streamWriter = new StreamWriter(name + ".xml");
+            streamWriter.Close();
 
-            //xs.Serialize(txtWriter, item);
+            foreach (var item in Tables[name])
+            {
+                Create(name, item.Value);
+            }
 
-            //txtWriter.Close();
+            return ret;
+        }
+
+        public object Read(string name, int id)
+        {
+            object ret = new object();
+
+            if (!Tables.ContainsKey(name))
+            {
+                ret = null;
+            }
+            else if (!Tables[name].ContainsKey(id))
+            {
+                ret = null;
+            }
+            else
+            {
+                ret = (Tables[name])[id];
+            }
 
             return ret;
         }

@@ -59,6 +59,12 @@
     <Compile Include="DeleteItems\DeleteItem.xaml.cs">
       <DependentUpon>DeleteItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReadItems\ReadItem.xaml.cs">
+      <DependentUpon>ReadItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReadItems\ShowReturnedItem.xaml.cs">
+      <DependentUpon>ShowReturnedItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SelectItems.xaml.cs">
       <DependentUpon>SelectItems.xaml</DependentUpon>
     </Compile>
@@ -220,6 +226,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ReadItems\ReadItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReadItems\ShowReturnedItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SelectItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -293,7 +307,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ReadItems\" />
     <Folder Include="UpdateItems\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

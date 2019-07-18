@@ -31,7 +31,28 @@ namespace DataBase.DeleteItems
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            if (DB.Delete(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text)))
+            {
+                MessageBoxResult result = MessageBox.Show("Deleted successfully",
+                                          "Information",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Information);
+                if (result == MessageBoxResult.OK)
+                {
+                    this.Close();
+                }
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Unable to delete item!",
+                                          "Information",
+                                          MessageBoxButton.OK,
+                                          MessageBoxImage.Error);
+                if (result == MessageBoxResult.OK)
+                {
+                    id.Text = "";
+                }
+            }
         }
     }
 }
