@@ -21,6 +21,7 @@ namespace DataBase.UpdateItems
     {
         DBManager DB;
         int ID;
+        string Name1;
         public UComputer(DBManager db, object obj, string name, int id)
         {
             InitializeComponent();
@@ -70,11 +71,86 @@ namespace DataBase.UpdateItems
             title.Content = name;
             DB = db;
             ID = id;
+            Name1 = name;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            bool ret = true;
+            if (Name1 == "Laptop")
+            {
+                Laptop laptop = new Laptop()
+                {
+                    Price = Convert.ToInt32(price.Text),
+                    Brand = brand.Text,
+                    RAM = Convert.ToInt32(ram.Text),
+                    ROM = Convert.ToInt32(rom.Text),
+                    Processor = processor.Text,
+                    KeyboardType = keyboardType.Text,
+                    BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
+                    ScreenSize = Convert.ToInt32(screenSize.Text),
+                    Resolution = resolution.Text
+                };
 
+                if (!DB.Update(Name1, ID, laptop))
+                    ret = false;
+            }
+            else if (Name1 == "Desktop")
+            {
+                Desktop desktop = new Desktop()
+                {
+                    Price = Convert.ToInt32(price.Text),
+                    Brand = brand.Text,
+                    RAM = Convert.ToInt32(ram.Text),
+                    ROM = Convert.ToInt32(rom.Text),
+                    Processor = processor.Text,
+                    Type = type.Text,
+                    PowerSupply = Convert.ToInt32(powerSupply.Text)
+                };
+
+                if (!DB.Update(Name1, ID, desktop))
+                    ret = false;
+            }
+            else
+            {
+                Tablet tablet = new Tablet()
+                {
+                    Price = Convert.ToInt32(price.Text),
+                    Brand = brand.Text,
+                    RAM = Convert.ToInt32(ram.Text),
+                    ROM = Convert.ToInt32(rom.Text),
+                    Processor = processor.Text,
+                    BatteryCapacity = Convert.ToInt32(batteryCapacity.Text),
+                    ScreenSize = Convert.ToInt32(screenSize.Text),
+                    Resolution = resolution.Text
+                };
+
+                if (!DB.Update(Name1, ID, tablet))
+                    ret = false;
+            }
+
+            if (!ret)
+            {
+                MessageBoxResult result = MessageBox.Show("Unable to update item!",
+                                                  "Information",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Error);
+                if (result == MessageBoxResult.OK)
+                {
+                    this.Close();
+                }
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Updated successfully",
+                                                  "Information",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Information);
+                if (result == MessageBoxResult.OK)
+                {
+                    this.Close();
+                }
+            }
         }
     }
 }

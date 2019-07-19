@@ -173,6 +173,8 @@ namespace DataBase
 
         public bool Create(string name, object item)
         {
+            Tables[name].Add(Tables[name].Count, item);
+
             bool ret = false;
             string filename = name + ".xml";
             const string wrapperTagName = "wrapper";
