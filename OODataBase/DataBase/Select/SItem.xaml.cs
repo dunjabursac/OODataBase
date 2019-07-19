@@ -38,7 +38,9 @@ namespace DataBase.Select
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SelectedItems = null;
+            this.Close();
+
+            SelectedItems = new List<object>();
 
             try
             {
@@ -105,8 +107,8 @@ namespace DataBase.Select
                 }
             }
 
-            
-            // Jovanov ispis SelectedItems - a
+            ShowSelectedIems ssi = new ShowSelectedIems(SelectedItems, "Item");
+            ssi.Show();
         }
     }
 }

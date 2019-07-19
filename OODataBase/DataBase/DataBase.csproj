@@ -83,6 +83,9 @@
     <Compile Include="Select\SCoolingDevice.xaml.cs">
       <DependentUpon>SCoolingDevice.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Select\ShowSelectedIems.xaml.cs">
+      <DependentUpon>ShowSelectedIems.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Select\SItem.xaml.cs">
       <DependentUpon>SItem.xaml</DependentUpon>
     </Compile>
@@ -255,6 +258,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Select\SCoolingDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Select\ShowSelectedIems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
