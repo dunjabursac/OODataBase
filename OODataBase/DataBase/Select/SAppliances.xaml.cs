@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SAppliances : Window
     {
-        public SAppliances(string choosenType)
+        public SAppliances(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

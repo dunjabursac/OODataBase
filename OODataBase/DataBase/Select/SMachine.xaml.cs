@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SMachine : Window
     {
-        public SMachine(string choosenType)
+        public SMachine(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

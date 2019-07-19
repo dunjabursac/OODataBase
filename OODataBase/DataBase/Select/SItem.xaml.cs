@@ -19,14 +19,94 @@ namespace DataBase.Select
     /// </summary>
     public partial class SItem : Window
     {
-        public SItem()
+        private DBManager DB;
+        private List<object> AllItemsInDB;
+        private List<object> SelectedItems;
+
+        private int inputPrice;
+        private string inputBrand = "";
+
+        private Item currentItem;
+
+        public SItem(DBManager db)
         {
+            DB = db;
+            AllItemsInDB = DB.GetAllItems();
+
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            SelectedItems = null;
 
+            try
+            {
+                inputPrice = Convert.ToInt32(price.Text);
+            }
+            catch
+            {
+                inputPrice = 0;
+            }
+
+            inputBrand = brand.Text;
+
+
+            if (inputPrice == 0 && inputBrand == "")
+            {
+                // oba polja prazna 
+
+                SelectedItems = AllItemsInDB;
+            }
+            else
+            {
+
+                if(inputPrice != 0 && inputBrand == "")
+                {
+                    // samo price
+
+                    foreach(var item in AllItemsInDB)
+                    {
+                        currentItem = (Item)item;
+
+                        if(currentItem.Price <= inputPrice)
+                        {
+                            SelectedItems.Add(currentItem);
+                        }
+                    }
+                }
+                else if(inputPrice == 0 && inputBrand != "")
+                {
+                    // samo brand
+
+                    foreach (var item in AllItemsInDB)
+                    {
+                        currentItem = (Item)item;
+
+                        if (currentItem.Brand == inputBrand)
+                        {
+                            SelectedItems.Add(currentItem);
+                        }
+                    }
+                }
+                else
+                {
+                    // oba popunjena
+
+                    foreach (var item in AllItemsInDB)
+                    {
+                        currentItem = (Item)item;
+
+                        if (currentItem.Price <= inputPrice && currentItem.Brand == inputBrand)
+                        {
+                            SelectedItems.Add(currentItem);
+                        }
+                    }
+                }
+            }
+
+            
+            // Jovanov ispis SelectedItems - a
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SLandline : Window
     {
-        public SLandline(string choosenType)
+        public SLandline(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

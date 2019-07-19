@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SPhone : Window
     {
-        public SPhone(string choosenType)
+        public SPhone(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

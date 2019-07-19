@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SCoolingDevice : Window
     {
-        public SCoolingDevice(string choosenType)
+        public SCoolingDevice(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

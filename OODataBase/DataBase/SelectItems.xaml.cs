@@ -82,7 +82,7 @@ namespace DataBase
             {
                 // nothing choosen -> Item
 
-                SItem sItem = new SItem();
+                SItem sItem = new SItem(DB);
                 sItem.Show();
             }
             else
@@ -96,15 +96,15 @@ namespace DataBase
                     switch (area.SelectedValue.ToString())
                     {
                         case "Computer":
-                            sArea = new SArea("Computer");
+                            sArea = new SArea(DB, "Computer");
                             sArea.Show();
                             break;
                         case "Appliances":
-                            sArea = new SArea("Appliances");
+                            sArea = new SArea(DB, "Appliances");
                             sArea.Show();
                             break;
                         case "Phone":
-                            sArea = new SArea("Appliances");
+                            sArea = new SArea(DB, "Appliances");
                             sArea.Show();
                             break;
                         default:
@@ -124,37 +124,37 @@ namespace DataBase
                         switch(category.SelectedValue.ToString())
                         {
                             case "Laptop":
-                                sComputer = new SComputer("Laptop");
+                                sComputer = new SComputer(DB, "Laptop");
                                 sComputer.Show();
                                 break;
                             case "Desktop":
-                                sComputer = new SComputer("Desktop");
+                                sComputer = new SComputer(DB, "Desktop");
                                 sComputer.Show();
                                 break;
                             case "Tablet":
-                                sComputer = new SComputer("Tablet");
+                                sComputer = new SComputer(DB, "Tablet");
                                 sComputer.Show();
                                 break;
 
                             case "CoolingDevice":
-                                sAppliances = new SAppliances("CoolingDevice");
+                                sAppliances = new SAppliances(DB, "CoolingDevice");
                                 sAppliances.Show();
                                 break;
                             case "Machine":
-                                sAppliances = new SAppliances("Machine");
+                                sAppliances = new SAppliances(DB, "Machine");
                                 sAppliances.Show();
                                 break;
                             case "Cooking":
-                                sAppliances = new SAppliances("Cooking");
+                                sAppliances = new SAppliances(DB, "Cooking");
                                 sAppliances.Show();
                                 break;
 
                             case "Landline":
-                                sPhone = new SPhone("Landline");
+                                sPhone = new SPhone(DB, "Landline");
                                 sPhone.Show();
                                 break;
                             case "Mobile":
-                                sPhone = new SPhone("Mobile");
+                                sPhone = new SPhone(DB, "Mobile");
                                 sPhone.Show();
                                 break;
 
@@ -177,60 +177,60 @@ namespace DataBase
                         switch(option.SelectedValue.ToString())
                         {
                             case "AirConditioner":
-                                sCoolingDevice = new SCoolingDevice("AirConditioner");
+                                sCoolingDevice = new SCoolingDevice(DB, "AirConditioner");
                                 sCoolingDevice.Show();
                                 break;
                             case "Fridge":
-                                sCoolingDevice = new SCoolingDevice("Fridge");
+                                sCoolingDevice = new SCoolingDevice(DB, "Fridge");
                                 sCoolingDevice.Show();
                                 break;
                             case "Freezer":
-                                sCoolingDevice = new SCoolingDevice("Freezer");
+                                sCoolingDevice = new SCoolingDevice(DB, "Freezer");
                                 sCoolingDevice.Show();
                                 break;
 
                             case "WashingMachine":
-                                sMachine = new SMachine("WashingMachine");
+                                sMachine = new SMachine(DB, "WashingMachine");
                                 sMachine.Show();
                                 break;
                             case "DryingMachine":
-                                sMachine = new SMachine("DryingMachine");
+                                sMachine = new SMachine(DB, "DryingMachine");
                                 sMachine.Show();
                                 break;
                             case "Dishwasher":
-                                sMachine = new SMachine("Dishwasher");
+                                sMachine = new SMachine(DB, "Dishwasher");
                                 sMachine.Show();
                                 break;
 
                             case "Cooker":
-                                sCooking = new SCooking("Cooker");
+                                sCooking = new SCooking(DB, "Cooker");
                                 sCooking.Show();
                                 break;
                             case "Oven":
-                                sCooking = new SCooking("Oven");
+                                sCooking = new SCooking(DB, "Oven");
                                 sCooking.Show();
                                 break;
                             case "Microwave":
-                                sCooking = new SCooking("Microwave");
+                                sCooking = new SCooking(DB, "Microwave");
                                 sCooking.Show();
                                 break;
 
 
                             case "Wireless":
-                                sLandline = new SLandline("Wireless");
+                                sLandline = new SLandline(DB, "Wireless");
                                 sLandline.Show();
                                 break;
                             case "Wire":
-                                sLandline = new SLandline("Wire");
+                                sLandline = new SLandline(DB, "Wire");
                                 sLandline.Show();
                                 break;
 
                             case "Smart":
-                                sMobile = new SMobile("Smart");
+                                sMobile = new SMobile(DB, "Smart");
                                 sMobile.Show();
                                 break;
                             case "Regular":
-                                sMobile = new SMobile("Regular");
+                                sMobile = new SMobile(DB, "Regular");
                                 sMobile.Show();
                                 break;
 

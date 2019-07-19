@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SCooking : Window
     {
-        public SCooking(string choosenType)
+        public SCooking(DBManager db, string choosenType)
         {
             InitializeComponent();
         }

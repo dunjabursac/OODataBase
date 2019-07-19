@@ -19,7 +19,7 @@ namespace DataBase.Select
     /// </summary>
     public partial class SMobile : Window
     {
-        public SMobile(string choosenType)
+        public SMobile(DBManager db, string choosenType)
         {
             InitializeComponent();
         }
