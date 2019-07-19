@@ -265,5 +265,25 @@ namespace DataBase
 
             return ret;
         }
+
+        public bool Update(string name, int id, object obj)
+        {
+            bool ret = true;
+
+            if (!Tables.ContainsKey(name))
+            {
+                ret = false;
+            }
+            else if (!Tables[name].ContainsKey(id))
+            {
+                ret = false;
+            }
+            else
+            {
+                Tables[name][id] = obj;
+            }
+
+            return ret;
+        }
     }
 }
