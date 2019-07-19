@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddItems\AddItem.xaml.cs">
+      <DependentUpon>AddItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DBManager.cs" />
     <Compile Include="DeleteItems\DeleteItem.xaml.cs">
       <DependentUpon>DeleteItem.xaml</DependentUpon>
@@ -101,6 +104,27 @@
     <Compile Include="Select\SPhone.xaml.cs">
       <DependentUpon>SPhone.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UpdateItems\UComputer.xaml.cs">
+      <DependentUpon>UComputer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateItems\UCooking.xaml.cs">
+      <DependentUpon>UCooking.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateItems\UCoolingDevice.xaml.cs">
+      <DependentUpon>UCoolingDevice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateItems\UItem.xaml.cs">
+      <DependentUpon>UItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateItems\ULandline.xaml.cs">
+      <DependentUpon>ULandline.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateItems\UMachine.xaml.cs">
+      <DependentUpon>UMachine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateItems\UMobile.xaml.cs">
+      <DependentUpon>UMobile.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddItems\AddAirConditioner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AddItems\AddFridge.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddItems\AddItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -285,6 +313,34 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UpdateItems\UComputer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\UCooking.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\UCoolingDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\UItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\ULandline.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\UMachine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\UMobile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model.cs" />
@@ -313,8 +369,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UpdateItems\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

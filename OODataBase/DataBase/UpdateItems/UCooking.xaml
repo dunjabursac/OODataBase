@@ -1,11 +1,11 @@
-﻿<Window x:Class="DataBase.AddItems.AddFridge"
+﻿<Window x:Class="DataBase.UpdateItems.UCooking"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DataBase.AddItems"
+        xmlns:local="clr-namespace:DataBase.UpdateItems"
         mc:Ignorable="d"
-        Title="AddFridge" Height="550" Width="400">
+        Title="UCooking" Height="550" Width="400">
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -33,24 +33,26 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold">Fridge</Label>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" Name="title"></Label>
 
         <Label Grid.Row="2" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Price</Label>
         <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Brand</Label>
-        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Min Cooling Temperature</Label>
+        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Max Temperature</Label>
         <Label Grid.Row="8" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Energy Class</Label>
-        <Label Grid.Row="10" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Volume</Label>
-        <Label Grid.Row="12" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Noise Level</Label>
-        <Label Grid.Row="14" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Type</Label>
+        <Label Grid.Row="12" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Managing" Visibility="Hidden">Managing</Label>
+        <Label Grid.Row="10" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="NoiseLevel" Visibility="Hidden">Noise Level</Label>
+        <Label Grid.Row="14" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="Volume" Visibility="Hidden">Volume</Label>
+        <Label Grid.Row="12" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="PanelType" Visibility="Hidden">Panel Type</Label>
 
         <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="price"></TextBox>
         <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="brand"></TextBox>
-        <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="minCoolingTemperature"></TextBox>
+        <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="maxTemperature"></TextBox>
         <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="energyClass"></TextBox>
-        <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="volume"></TextBox>
-        <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="noiseLevel"></TextBox>
-        <TextBox Grid.Row="14" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="type"></TextBox>
+        <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="managing" Visibility="Hidden"></TextBox>
+        <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="noiseLevel" Visibility="Hidden"></TextBox>
+        <TextBox Grid.Row="14" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="volume" Visibility="Hidden"></TextBox>
+        <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="panelType" Visibility="Hidden"></TextBox>
 
-        <Button Grid.Row="16" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click" >Add Fridge</Button>
+        <Button Grid.Row="16" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Add Cooking Item</Button>
     </Grid>
 </Window>

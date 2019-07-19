@@ -173,6 +173,8 @@ namespace DataBase
 
         public bool Create(string name, object item)
         {
+            Tables[name].Add(Tables[name].Count, item);
+
             bool ret = false;
             string filename = name + ".xml";
             const string wrapperTagName = "wrapper";
@@ -266,6 +268,26 @@ namespace DataBase
             return ret;
         }
 
+        public bool Update(string name, int id, object obj)
+        {
+            bool ret = true;
+
+            if (!Tables.ContainsKey(name))
+            {
+                ret = false;
+            }
+            else if (!Tables[name].ContainsKey(id))
+            {
+                ret = false;
+            }
+            else
+            {
+                Tables[name][id] = obj;
+            }
+
+            return ret;
+        }
+        
         public List<object> GetAllItems()
         {
             List<object> allItems = new List<object>();
