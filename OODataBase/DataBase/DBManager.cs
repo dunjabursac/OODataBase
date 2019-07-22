@@ -290,13 +290,13 @@ namespace DataBase
         
         public List<object> GetAllItems()
         {
-            List<object> allItems = null;
+            List<object> allItems = new List<object>();
 
             foreach(var kvp1 in Tables)
             {
                 foreach (var kvp2 in kvp1.Value)
                 {
-                    allItems.Add(kvp2);
+                    allItems.Add(kvp2.Value);
                 }
             }
 
