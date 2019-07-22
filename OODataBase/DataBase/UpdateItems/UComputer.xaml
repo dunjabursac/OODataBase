@@ -63,7 +63,7 @@
         <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="type" Visibility="Hidden"></TextBox>
         <TextBox Grid.Row="14" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="powerSupply" Visibility="Hidden"></TextBox>
 
-        <Button Grid.Row="20" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Add Computer</Button>
+        <Button Grid.Row="20" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Update Computer</Button>
     </Grid>
 </Window>
 
