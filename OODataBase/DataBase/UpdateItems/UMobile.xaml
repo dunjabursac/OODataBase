@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBase.UpdateItems"
         mc:Ignorable="d"
-        Title="UMobile" Height="450" Width="800">
-    <Grid>
-        
+        Title="UMobile" Height="600" Width="400">
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" Name="title"></Label>
+
+        <Label Grid.Row="2" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Price</Label>
+        <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Brand</Label>
+        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">RAM</Label>
+        <Label Grid.Row="8" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">ROM</Label>
+        <Label Grid.Row="10" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Microphone Sensitivity</Label>
+        <Label Grid.Row="12" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">OS</Label>
+        <Label Grid.Row="14" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Resolution</Label>
+        <Label Grid.Row="16" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Screen Size</Label>
+        <Label Grid.Row="18" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Speaker Volume</Label>
+        <Label Grid.Row="20" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="WiFiType" Visibility="Hidden">WiFi Type</Label>
+
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="price"></TextBox>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="brand"></TextBox>
+        <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="ram"></TextBox>
+        <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="rom"></TextBox>
+        <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="microphoneSensitivity"></TextBox>
+        <TextBox Grid.Row="12" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="os"></TextBox>
+        <TextBox Grid.Row="14" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="resolution"></TextBox>
+        <TextBox Grid.Row="16" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="screenSize"></TextBox>
+        <TextBox Grid.Row="18" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="speakerVolume"></TextBox>
+        <TextBox Grid.Row="20" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="wiFiType" Visibility="Hidden"></TextBox>
+
+        <Button Grid.Row="22" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Update Mobile Phone</Button>
     </Grid>
 </Window>
