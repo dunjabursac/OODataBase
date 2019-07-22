@@ -24,11 +24,13 @@ namespace DataBase.Select
 
         private List<object> SelectedLaptops;
         private List<Laptop> AllLaptops;
-        private List<Laptop> tmp;
+        private List<Laptop> tmpLaptops;
         private List<object> SelectedDesktops;
         private List<Desktop> AllDesktops;
+        private List<Desktop> tmpDesktops;
         private List<object> SelectedTablets;
         private List<Tablet> AllTablets;
+        private List<Tablet> tmpTablets;
 
         private int inputPrice;
         private string inputBrand = "";
@@ -139,16 +141,24 @@ namespace DataBase.Select
                 try
                 {
                     inputBatteryCapacity = Convert.ToInt32(batteryCapacity.Text);
-                    inputScreenSize = Convert.ToInt32(screenSize.Text);
                 }
                 catch
                 {
                     inputBatteryCapacity = Int32.MaxValue;
-                    inputScreenSize = Int32.MaxValue;
                 }
 
+                try
+                {
+                    inputScreenSize = Convert.ToInt32(screenSize.Text);
+                }
+                catch
+                {
+                    inputScreenSize = Int32.MaxValue;
+                }
+                
                 inputResolution = resolution.Text;
                 inputKeyboardType = keyboardType.Text;
+
 
                 foreach(var item in AllItemsInDB)
                 {
@@ -174,9 +184,9 @@ namespace DataBase.Select
                     }
                 }
 
-                tmp = new List<Laptop>(AllLaptops);
+                tmpLaptops = new List<Laptop>(AllLaptops);
 
-                foreach(var laptop in tmp)
+                foreach(var laptop in tmpLaptops)
                 {
                     if(inputProcessor == "")
                     {
@@ -191,9 +201,9 @@ namespace DataBase.Select
                     }
                 }
 
-                tmp = new List<Laptop>(AllLaptops);
+                tmpLaptops = new List<Laptop>(AllLaptops);
 
-                foreach (var laptop in tmp)
+                foreach (var laptop in tmpLaptops)
                 {
                     if (inputResolution == "")
                     {
@@ -208,9 +218,9 @@ namespace DataBase.Select
                     }
                 }
 
-                tmp = new List<Laptop>(AllLaptops);
+                tmpLaptops = new List<Laptop>(AllLaptops);
 
-                foreach (var laptop in tmp)
+                foreach (var laptop in tmpLaptops)
                 {
                     if (inputKeyboardType == "")
                     {
@@ -239,13 +249,189 @@ namespace DataBase.Select
             }
             else if(ChoosenType == "Desktop")
             {
+                SelectedDesktops = new List<object>();
+                AllDesktops = new List<Desktop>();
 
+                try
+                {
+                    inputPowerSupply = Convert.ToInt32(powerSupply.Text);
+                }
+                catch
+                {
+                    inputPowerSupply = Int32.MaxValue;
+                }
+
+                inputType = type.Text;
+
+                foreach (var item in AllItemsInDB)
+                {
+                    try
+                    {
+                        currentDesktop = (Desktop)item;
+
+                        if (inputBrand == "")
+                        {
+                            AllDesktops.Add(currentDesktop);
+                        }
+                        else
+                        {
+                            if (currentDesktop.Brand == inputBrand)
+                            {
+                                AllDesktops.Add(currentDesktop);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+
+                tmpDesktops = new List<Desktop>(AllDesktops);
+
+                foreach (var desktop in tmpDesktops)
+                {
+                    if (inputProcessor == "")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (desktop.Processor != inputProcessor)
+                        {
+                            AllDesktops.Remove(desktop);
+                        }
+                    }
+                }
+
+                tmpDesktops = new List<Desktop>(AllDesktops);
+
+                foreach (var desktop in tmpDesktops)
+                {
+                    if (inputType == "")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (desktop.Type != inputType)
+                        {
+                            AllDesktops.Remove(desktop);
+                        }
+                    }
+                }
+
+                
+
+
+                foreach (var desktop in AllDesktops)
+                {
+                    if (desktop.Price <= inputPrice && desktop.RAM <= inputRAM && desktop.ROM <= inputROM && desktop.PowerSupply <= inputPowerSupply)
+                    {
+                        SelectedDesktops.Add(desktop);
+                    }
+                }
+
+                ShowSelectedIems ssi = new ShowSelectedIems(SelectedDesktops, "Desktop");
+                ssi.Show();
             }
             else
             {
                 // Tablet
 
+                SelectedTablets = new List<object>();
+                AllTablets = new List<Tablet>();
 
+                try
+                {
+                    inputBatteryCapacity_T = Convert.ToInt32(batteryCapacity_T.Text);
+                }
+                catch
+                {
+                    inputBatteryCapacity_T = Int32.MaxValue;
+                }
+
+                try
+                {
+                    inputScreenSize_T = Convert.ToInt32(screenSize_T.Text);
+                }
+                catch
+                {
+                    inputScreenSize_T = Int32.MaxValue;
+                }
+
+                inputResolution_T = resolution_T.Text;
+
+
+                foreach (var item in AllItemsInDB)
+                {
+                    try
+                    {
+                        currentTablet = (Tablet)item;
+
+                        if (inputBrand == "")
+                        {
+                            AllTablets.Add(currentTablet);
+                        }
+                        else
+                        {
+                            if (currentTablet.Brand == inputBrand)
+                            {
+                                AllTablets.Add(currentTablet);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+
+                tmpTablets = new List<Tablet>(AllTablets);
+
+                foreach (var tablet in tmpTablets)
+                {
+                    if (inputProcessor == "")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (tablet.Processor != inputProcessor)
+                        {
+                            AllTablets.Remove(tablet);
+                        }
+                    }
+                }
+
+                tmpTablets = new List<Tablet>(AllTablets);
+
+                foreach (var tablet in tmpTablets)
+                {
+                    if (inputResolution_T == "")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (tablet.Resolution != inputResolution_T)
+                        {
+                            AllTablets.Remove(tablet);
+                        }
+                    }
+                }
+
+
+                foreach (var tablet in AllTablets)
+                {
+                    if (tablet.Price <= inputPrice && tablet.RAM <= inputRAM && tablet.ROM <= inputROM && tablet.BatteryCapacity <= inputBatteryCapacity_T && tablet.ScreenSize <= inputScreenSize_T)
+                    {
+                        SelectedTablets.Add(tablet);
+                    }
+                }
+
+                ShowSelectedIems ssi = new ShowSelectedIems(SelectedTablets, "Tablet");
+                ssi.Show();
             }
         }
     }
