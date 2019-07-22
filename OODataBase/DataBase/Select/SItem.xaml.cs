@@ -48,64 +48,86 @@ namespace DataBase.Select
             }
             catch
             {
-                inputPrice = 0;
+                inputPrice = Int32.MaxValue;
             }
 
             inputBrand = brand.Text;
 
+            if(inputBrand == "")
+            {
+                foreach (var item in AllItemsInDB)
+                {
+                    currentItem = (Item)item;
 
+                    if (currentItem.Price <= inputPrice)
+                    {
+                        SelectedItems.Add(currentItem);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in AllItemsInDB)
+                {
+                    currentItem = (Item)item;
+
+                    if (currentItem.Price <= inputPrice && currentItem.Brand == inputBrand)
+                    {
+                        SelectedItems.Add(currentItem);
+                    }
+                }
+            }
+
+            /*
             if (inputPrice == 0 && inputBrand == "")
             {
                 // oba polja prazna 
 
                 SelectedItems = AllItemsInDB;
             }
-            else
+            else if (inputPrice != 0 && inputBrand == "")
             {
+                // samo price
 
-                if(inputPrice != 0 && inputBrand == "")
+                foreach (var item in AllItemsInDB)
                 {
-                    // samo price
+                    currentItem = (Item)item;
 
-                    foreach(var item in AllItemsInDB)
+                    if (currentItem.Price <= inputPrice)
                     {
-                        currentItem = (Item)item;
-
-                        if(currentItem.Price <= inputPrice)
-                        {
-                            SelectedItems.Add(currentItem);
-                        }
-                    }
-                }
-                else if(inputPrice == 0 && inputBrand != "")
-                {
-                    // samo brand
-
-                    foreach (var item in AllItemsInDB)
-                    {
-                        currentItem = (Item)item;
-
-                        if (currentItem.Brand == inputBrand)
-                        {
-                            SelectedItems.Add(currentItem);
-                        }
-                    }
-                }
-                else
-                {
-                    // oba popunjena
-
-                    foreach (var item in AllItemsInDB)
-                    {
-                        currentItem = (Item)item;
-
-                        if (currentItem.Price <= inputPrice && currentItem.Brand == inputBrand)
-                        {
-                            SelectedItems.Add(currentItem);
-                        }
+                        SelectedItems.Add(currentItem);
                     }
                 }
             }
+            else if (inputPrice == 0 && inputBrand != "")
+            {
+                // samo brand
+
+                foreach (var item in AllItemsInDB)
+                {
+                    currentItem = (Item)item;
+
+                    if (currentItem.Brand == inputBrand)
+                    {
+                        SelectedItems.Add(currentItem);
+                    }
+                }
+            }
+            else
+            {
+                // oba popunjena
+
+                foreach (var item in AllItemsInDB)
+                {
+                    currentItem = (Item)item;
+
+                    if (currentItem.Price <= inputPrice && currentItem.Brand == inputBrand)
+                    {
+                        SelectedItems.Add(currentItem);
+                    }
+                }
+            }
+            */
 
             ShowSelectedIems ssi = new ShowSelectedIems(SelectedItems, "Item");
             ssi.Show();

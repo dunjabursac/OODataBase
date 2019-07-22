@@ -104,7 +104,7 @@ namespace DataBase
                             sArea.Show();
                             break;
                         case "Phone":
-                            sArea = new SArea(DB, "Appliances");
+                            sArea = new SArea(DB, "Phone");
                             sArea.Show();
                             break;
                         default:
