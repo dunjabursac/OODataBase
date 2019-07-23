@@ -265,6 +265,7 @@ namespace DataBase
 
             StreamWriter streamWriter = new StreamWriter(name + ".xml");
             streamWriter.Close();
+            Tables[name] = new Dictionary<int, object>();
 
             //foreach (var item in Tables[name])
             //{

@@ -5,8 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBase.Select"
         mc:Ignorable="d"
-        Title="SArea" Height="450" Width="800">
+        Title="SArea" Height="600" Width="400">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" Name="title"></Label>
+
+        <Label Grid.Row="2" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Price</Label>
+        <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Brand</Label>
+
+        <Label Grid.Row="6" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="ram_label">RAM</Label>
+        <Label Grid.Row="8" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="rom_label">ROM</Label>
+        <Label Grid.Row="10" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="processor_label">Processor</Label>
+
+        <Label Grid.Row="6" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="nl_label">Noise Level</Label>
+        <Label Grid.Row="8" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="ec_label">Energy Class</Label>
+
+        <Label Grid.Row="6" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="sv_label">Speaker Volume</Label>
+        <Label Grid.Row="8" Visibility="Hidden" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="ms_label">Microphone Sensitivity</Label>
+
+
+
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="price"></TextBox>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="brand"></TextBox>
+
+        <TextBox Visibility="Hidden" Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="ram"></TextBox>
+        <TextBox Visibility="Hidden" Grid.Row="8" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="rom"></TextBox>
+        <TextBox Visibility="Hidden" Grid.Row="10" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="processor"></TextBox>
+
+        <TextBox Visibility="Hidden" Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="noiseLevel"></TextBox>
+        <TextBox Visibility="Hidden" Grid.Row="8" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="energyClass"></TextBox>
+
+        <TextBox Visibility="Hidden" Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="speakerVolume"></TextBox>
+        <TextBox Visibility="Hidden" Grid.Row="8" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="microphoneSensitivity"></TextBox>
+
+
+        <Button Grid.Row="12" Grid.ColumnSpan="2" Width="200" FontSize="16" Click="Button_Click">Select</Button>
+
     </Grid>
 </Window>
