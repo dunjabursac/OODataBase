@@ -161,6 +161,10 @@ namespace DataBase {
         
         private string brandField;
         
+        private int idField;
+        
+        private int versionField;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int Price {
@@ -180,6 +184,28 @@ namespace DataBase {
             }
             set {
                 this.brandField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
             }
         }
     }

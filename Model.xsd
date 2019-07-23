@@ -5,6 +5,8 @@
 <xs:sequence>
 <xs:element name="Price" type="xs:int"/> 
 <xs:element name="Brand" type="xs:string"/> 
+<xs:element name="ID" type="xs:int"/> 
+<xs:element name="Version" type="xs:int"/> 
 </xs:sequence>
 
 </xs:complexType>

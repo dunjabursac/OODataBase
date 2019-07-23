@@ -98,6 +98,11 @@ namespace DataBase
                 }
             }
 
+            TableFill();
+        }
+
+        void TableFill()
+        {
             foreach (var item in Tables)
             {
                 using (var xml = new XmlTextReader(item.Key + ".xml"))
@@ -113,7 +118,6 @@ namespace DataBase
                         continue;
                     }
                     object obj;
-                    int i = 0;
                     int numOfTry = 0;
 
                     while (true)
@@ -129,14 +133,13 @@ namespace DataBase
                             //xml.Read();
                             numOfTry++;
                             continue;
-                            
+
                         }
                         //xml.Read();
                         if (obj != null)
                         {
                             numOfTry = 0;
-                            Tables[item.Key].Add(i, obj);
-                            i++;
+                            Tables[item.Key].Add(((Item)obj).ID, obj);
                         }
                     }
                 }
@@ -188,8 +191,15 @@ namespace DataBase
 
         public bool Create(string name, object item, bool delOrUpd = false)
         {
-            if(!delOrUpd)
-                Tables[name].Add(Tables[name].Count, item);
+            if (Tables[name].Count != 0)
+            {
+                ((Item)item).ID = ((Item)Tables[name].Last().Value).ID + 1;
+            }
+            else
+            {
+                ((Item)item).ID = 0;
+            }
+            Tables[name].Add(((Item)item).ID, item);
 
             bool ret = false;
             string filename = name + ".xml";
@@ -261,33 +271,7 @@ namespace DataBase
             //    Create(name, item.Value, true);
             //}
 
-            if (Tables[name].Count != 0)
-            {
-
-                string filename = name + ".xml";
-                const string wrapperTagName = "wrapper";
-                string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
-                string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
-
-                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-                {
-                    XmlWriter xml = null;
-                    Type t = Type.GetType("DataBase." + name);
-                    var serializer = new XmlSerializer(t);
-                    xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true, ConformanceLevel = ConformanceLevel.Fragment, CloseOutput = false });
-                    //xml.WriteStartDocument();
-                    xml.WriteRaw(wrapperStartTag);
-
-                    foreach (var item in Tables[name])
-                    {
-                        serializer.Serialize(xml, item.Value);
-                        xml.Flush();
-                    }
-
-                    xml.WriteRaw(wrapperEndTag);
-                    xml.Close();
-                }
-            }
+            RefreshXml(name);
 
             return ret;
         }
@@ -326,6 +310,7 @@ namespace DataBase
             }
             else
             {
+                ((Item)obj).ID = id;
                 Tables[name][id] = obj;
             }
 
@@ -337,6 +322,28 @@ namespace DataBase
             //    Create(name, item.Value, true);
             //}
 
+            RefreshXml(name);
+
+            return ret;
+        }
+        
+        public List<object> GetAllItems()
+        {
+            List<object> allItems = new List<object>();
+
+            foreach(var kvp1 in Tables)
+            {
+                foreach (var kvp2 in kvp1.Value)
+                {
+                    allItems.Add(kvp2.Value);
+                }
+            }
+
+            return allItems;
+        }
+
+        void RefreshXml(string name)
+        {
             if (Tables[name].Count != 0)
             {
 
@@ -364,23 +371,6 @@ namespace DataBase
                     xml.Close();
                 }
             }
-
-            return ret;
-        }
-        
-        public List<object> GetAllItems()
-        {
-            List<object> allItems = new List<object>();
-
-            foreach(var kvp1 in Tables)
-            {
-                foreach (var kvp2 in kvp1.Value)
-                {
-                    allItems.Add(kvp2.Value);
-                }
-            }
-
-            return allItems;
         }
     }
 }
