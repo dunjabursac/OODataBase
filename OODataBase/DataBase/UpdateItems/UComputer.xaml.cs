@@ -22,6 +22,7 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
+        int Version;
         public UComputer(DBManager db, object obj, string name, int id)
         {
             InitializeComponent();
@@ -71,6 +72,7 @@ namespace DataBase.UpdateItems
             title.Content = name;
             DB = db;
             ID = id;
+            Version = ((Item)obj).Version;
             Name1 = name;
         }
 

@@ -49,7 +49,26 @@ namespace DataBase.DeleteItems
                 }
                 else
                 {
-                    if (DB.Delete(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text)))
+                    bool ret = false;
+                    if (version.Text == "")
+                    {
+                        ret = DB.Delete(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text), Int32.MaxValue);
+                    }
+                    else
+                    {
+                        if (!Int32.TryParse(version.Text, out int tmp1))
+                        {
+                            MessageBoxResult result = MessageBox.Show("Version must be a number!",
+                                                  "Information",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            ret = DB.Delete(comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text), Convert.ToInt32(version.Text));
+                        }
+                    }
+                    if (ret)
                     {
                         MessageBoxResult result = MessageBox.Show("Deleted successfully",
                                                   "Information",

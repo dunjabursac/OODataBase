@@ -22,11 +22,13 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
+        int Version;
         public UMobile(DBManager db, object obj, string name, int id)
         {
             DB = db;
             ID = id;
             Name1 = name;
+            Version = ((Item)obj).Version;
             InitializeComponent();
 
             price.Text = ((Mobile)obj).Price.ToString();
