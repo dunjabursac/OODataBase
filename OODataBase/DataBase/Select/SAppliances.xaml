@@ -34,8 +34,8 @@
         
         <Label Grid.Row="2" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Price</Label>
         <Label Grid.Row="4" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Brand</Label>
-        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="nl_label">Noise Level</Label>
-        <Label Grid.Row="8" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="ec_label">Energy Class</Label>
+        <Label Grid.Row="6" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Noise Level</Label>
+        <Label Grid.Row="8" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Energy Class</Label>
 
         <Label Visibility="Hidden" Grid.Row="10" Grid.Column="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Name="minCoolingTemperature_label">Min Cooling Temperature</Label>
 
