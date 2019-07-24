@@ -13,9 +13,9 @@ namespace DataBase
 {
     public class DBManager
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
-        public static Dictionary<string, Dictionary<int, List<object>>> TablesList;
-        public static Dictionary<string, List<string>> ParentChildren;
+        private static Dictionary<string, Dictionary<int, object>> Tables;
+        private static Dictionary<string, Dictionary<int, List<object>>> TablesList;
+        private static Dictionary<string, List<string>> ParentChildren;
         private static int Version = 1;
 
         public DBManager()
@@ -25,6 +25,17 @@ namespace DataBase
 
         private void CreateTables()
         {
+            try
+            {
+                using (StreamReader stream = new StreamReader("Version.txt"))
+                {
+                    Version = Int32.Parse(stream.ReadLine());
+                }
+            }
+            catch
+            {
+                WriteVersion(Version);
+            }
             Tables = new Dictionary<string, Dictionary<int, object>>();
             TablesList = new Dictionary<string, Dictionary<int, List<object>>>();
 
@@ -239,7 +250,7 @@ namespace DataBase
             TablesList[name].Add(((Item)item).ID, new List<object>());
             TablesList[name][((Item)item).ID].Add(item);
 
-            bool ret = false;
+            bool ret = true;
             string filename = name + ".xml";
             const string wrapperTagName = "wrapper";
             string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
@@ -265,7 +276,7 @@ namespace DataBase
                     stream.Read(buffer, 0, bufferLength);
                     if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
                     {
-                        throw new Exception("Invalid file");
+                        ret = false;
                     }
                     else
                     {
@@ -397,6 +408,7 @@ namespace DataBase
                 ((Item)obj).Version = Version;
                 TablesList[name][id].Insert(0, obj);
                 Version++;
+                WriteVersion(Version);
             }
 
             StreamWriter streamWriter = new StreamWriter(name + ".xml");
@@ -408,6 +420,50 @@ namespace DataBase
             //}
 
             RefreshXml(name);
+
+            return ret;
+        }
+
+        public bool UpdateMultiple(List<string> names, List<int> ids, List<object> objects)
+        {
+            bool ret = true;
+
+            if (names.Count == 0)
+                ret = false;
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (!TablesList.ContainsKey(names[i]))
+                {
+                    ret = false;
+                    break;
+                }
+                else if (!TablesList[names[i]].ContainsKey(ids[i]))
+                {
+                    ret = false;
+                    break;
+                }
+            }
+
+            if (ret)
+            {
+                for (int i = 0; i < names.Count; i++)
+                {
+                    ((Item)objects[i]).ID = ids[i];
+                    ((Item)objects[i]).Version = Version;
+                    TablesList[names[i]][ids[i]].Insert(0, objects[i]);
+                }
+                Version++;
+                WriteVersion(Version);
+            }
+
+            foreach (string name in names)
+            {
+                StreamWriter streamWriter = new StreamWriter(name + ".xml");
+                streamWriter.Close();
+
+                RefreshXml(name);
+            }
 
             return ret;
         }
@@ -465,6 +521,14 @@ namespace DataBase
             }
         }
 
+        void WriteVersion(int version)
+        {
+            using (StreamWriter stream = new StreamWriter("Version.txt", false))
+            {
+                stream.Write(version);
+            }
+        }
+        
         public List<object> GetItemsByType(string choosenType)
         {
             List<object> allItems = GetAllItems();

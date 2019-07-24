@@ -72,5 +72,11 @@ namespace DataBase
             SelectPropertyValue selectPropertyValue = new SelectPropertyValue(db);
             selectPropertyValue.Show();
         }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            UMultipleItems ui = new UMultipleItems(db);
+            ui.Show();
+        }
     }
 }

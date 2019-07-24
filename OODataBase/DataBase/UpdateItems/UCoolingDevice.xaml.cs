@@ -22,13 +22,14 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
-        int Version;
-        public UCoolingDevice(DBManager db, object obj, string name, int id)
+        UMultipleItems PWindow = null;
+
+        public UCoolingDevice(DBManager db, object obj, string name, int id, UMultipleItems window = null)
         {
             DB = db;
             ID = id;
             Name1 = name;
-            Version = ((Item)obj).Version;
+            PWindow = window;
             InitializeComponent();
 
             price.Text = ((CoolingDevice)obj).Price.ToString();
@@ -77,8 +78,15 @@ namespace DataBase.UpdateItems
                     Type = type.Text
                 };
 
-                if (!DB.Update(Name1, ID, fridge))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(fridge);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, fridge))
+                        ret = false;
+                }
             }
             else if (Name1 == "Freezer")
             {
@@ -92,8 +100,15 @@ namespace DataBase.UpdateItems
                     NoiseLevel = Convert.ToInt32(noiseLevel.Text)
                 };
 
-                if (!DB.Update(Name1, ID, freezer))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(freezer);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, freezer))
+                        ret = false;
+                }
             }
             else
             {
@@ -107,31 +122,45 @@ namespace DataBase.UpdateItems
                     NoiseLevel = Convert.ToInt32(noiseLevel.Text),
                 };
 
-                if (!DB.Update(Name1, ID, airConditioner))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(airConditioner);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, airConditioner))
+                        ret = false;
+                }
             }
 
-            if (!ret)
+            if (PWindow == null)
             {
-                MessageBoxResult result = MessageBox.Show("Unable to update item!",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Error);
-                if (result == MessageBoxResult.OK)
+                if (!ret)
                 {
-                    this.Close();
+                    MessageBoxResult result = MessageBox.Show("Unable to update item!",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Updated successfully",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("Updated successfully",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Information);
-                if (result == MessageBoxResult.OK)
-                {
-                    this.Close();
-                }
+                this.Close();
             }
         }
     }

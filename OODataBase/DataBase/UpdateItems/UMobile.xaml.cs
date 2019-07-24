@@ -22,13 +22,14 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
-        int Version;
-        public UMobile(DBManager db, object obj, string name, int id)
+        UMultipleItems PWindow = null;
+
+        public UMobile(DBManager db, object obj, string name, int id, UMultipleItems window = null)
         {
             DB = db;
             ID = id;
             Name1 = name;
-            Version = ((Item)obj).Version;
+            PWindow = window;
             InitializeComponent();
 
             price.Text = ((Mobile)obj).Price.ToString();
@@ -69,8 +70,15 @@ namespace DataBase.UpdateItems
                     WiFiType = wiFiType.Text,
                 };
 
-                if (!DB.Update(Name1, ID, smart))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(smart);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, smart))
+                        ret = false;
+                }
             }
             else
             {
@@ -87,31 +95,45 @@ namespace DataBase.UpdateItems
                     SpeakerVolume = Convert.ToInt32(speakerVolume.Text),
                 };
 
-                if (!DB.Update(Name1, ID, regular))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(regular);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, regular))
+                        ret = false;
+                }
             }
 
-            if (!ret)
+            if (PWindow == null)
             {
-                MessageBoxResult result = MessageBox.Show("Unable to update item!",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Error);
-                if (result == MessageBoxResult.OK)
+                if (!ret)
                 {
-                    this.Close();
+                    MessageBoxResult result = MessageBox.Show("Unable to update item!",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Updated successfully",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("Updated successfully",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Information);
-                if (result == MessageBoxResult.OK)
-                {
-                    this.Close();
-                }
+                this.Close();
             }
         }
     }

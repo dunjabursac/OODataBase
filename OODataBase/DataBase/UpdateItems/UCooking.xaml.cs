@@ -22,13 +22,13 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
-        int Version;
-        public UCooking(DBManager db, object obj, string name, int id)
+        UMultipleItems PWindow = null;
+        public UCooking(DBManager db, object obj, string name, int id, UMultipleItems window = null)
         {
             DB = db;
             ID = id;
             Name1 = name;
-            Version = ((Item)obj).Version;
+            PWindow = window;
             InitializeComponent();
 
             price.Text = ((Cooking)obj).Price.ToString();
@@ -78,8 +78,15 @@ namespace DataBase.UpdateItems
                     NoiseLevel = Convert.ToInt32(noiseLevel.Text),
                 };
 
-                if (!DB.Update(Name1, ID, oven))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(oven);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, oven))
+                        ret = false;
+                }
             }
             else if (Name1 == "Cooker")
             {
@@ -93,8 +100,15 @@ namespace DataBase.UpdateItems
                     NoiseLevel = Convert.ToInt32(noiseLevel.Text),
                 };
 
-                if (!DB.Update(Name1, ID, cooker))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(cooker);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, cooker))
+                        ret = false;
+                }
             }
             else
             {
@@ -109,31 +123,45 @@ namespace DataBase.UpdateItems
                     Volume = Convert.ToInt32(volume.Text)
                 };
 
-                if (!DB.Update(Name1, ID, microwave))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(microwave);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, microwave))
+                        ret = false;
+                }
             }
 
-            if (!ret)
+            if (PWindow == null)
             {
-                MessageBoxResult result = MessageBox.Show("Unable to update item!",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Error);
-                if (result == MessageBoxResult.OK)
+                if (!ret)
                 {
-                    this.Close();
+                    MessageBoxResult result = MessageBox.Show("Unable to update item!",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Updated successfully",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("Updated successfully",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Information);
-                if (result == MessageBoxResult.OK)
-                {
-                    this.Close();
-                }
+                this.Close();
             }
         }
     }
