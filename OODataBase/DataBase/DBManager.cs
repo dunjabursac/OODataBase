@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -911,6 +912,36 @@ namespace DataBase
             }
 
             return versionsOfChoosenType;
+        }
+
+        public List<object> Select(string choosenType, string property, string value, int version)
+        {
+            List<object> itemsByTypeAndVersion = GetItemsByTypeAndVersion(choosenType, version);
+            List<object> itemsByTypeVersionAndProperty = new List<object>();
+
+            if (property == "")
+            {
+                itemsByTypeVersionAndProperty = itemsByTypeAndVersion;
+            }
+            else
+            {
+                foreach (var item in itemsByTypeAndVersion)
+                {
+                    foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(item))
+                    {
+                        if (descriptor.Name == property)
+                        {
+                            if (descriptor.GetValue(item).ToString() == value)
+                            {
+                                itemsByTypeVersionAndProperty.Add(item);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return itemsByTypeVersionAndProperty;
         }
     }
 }

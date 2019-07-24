@@ -82,6 +82,9 @@ namespace DataBase
             // Choose
             // popunjavas Properties
 
+            property.SelectedValue = null;
+            value.Text = "";
+            version.Text = "";
             
             if(area.Text == "")
             {
@@ -136,26 +139,18 @@ namespace DataBase
                 inputVersion = Int32.MaxValue;
             }
 
-            List<object> itemsByTypeAndVersion = DB.GetItemsByTypeAndVersion(ChoosenType, inputVersion);
-            List<object> itemsByTypeVersionAndProperty = new List<object>();
-
-            foreach(var item in itemsByTypeAndVersion)
+            if (value.Text == "" && property.SelectedValue != null)
             {
-                foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(item))
-                {
-                    if(descriptor.Name == property.Text)
-                    {
-                        if(descriptor.GetValue(item).ToString() == value.Text)
-                        {
-                            itemsByTypeVersionAndProperty.Add(item);
-                            break;
-                        }
-                    }
-                }
+                MessageBoxResult result = MessageBox.Show("Value is required!",
+                                      "Information",
+                                      MessageBoxButton.OK,
+                                      MessageBoxImage.Error);
             }
-
-            ShowSelectedIems ssi = new ShowSelectedIems(itemsByTypeVersionAndProperty, ChoosenType);
-            ssi.Show();
+            else
+            {
+                ShowSelectedIems ssi = new ShowSelectedIems(DB.Select(ChoosenType, property.Text, value.Text, inputVersion), ChoosenType);
+                ssi.Show();
+            }
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
