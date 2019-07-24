@@ -12,9 +12,9 @@ namespace DataBase
 {
     public class DBManager
     {
-        public static Dictionary<string, Dictionary<int, object>> Tables;
-        public static Dictionary<string, Dictionary<int, List<object>>> TablesList;
-        public static Dictionary<string, List<string>> ParentChildren;
+        private static Dictionary<string, Dictionary<int, object>> Tables;
+        private static Dictionary<string, Dictionary<int, List<object>>> TablesList;
+        private static Dictionary<string, List<string>> ParentChildren;
         private static int Version = 1;
 
         public DBManager()
@@ -426,6 +426,9 @@ namespace DataBase
         public bool UpdateMultiple(List<string> names, List<int> ids, List<object> objects)
         {
             bool ret = true;
+
+            if (names.Count == 0)
+                ret = false;
 
             for (int i = 0; i < names.Count; i++)
             {

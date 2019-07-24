@@ -121,8 +121,6 @@ namespace DataBase.UpdateItems
                         Type t = Type.GetType("DataBase." + selected).BaseType;
                         Type t2 = Type.GetType("DataBase.UpdateItems.U" + t.Name);
                         var updateItem = (Window)Activator.CreateInstance(t2, DB, obj, comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text), this);
-                        names.Add(comboBox_Items.SelectedItem.ToString());
-                        ids.Add(Convert.ToInt32(id.Text));
                         updateItem.Show();
                     }
                 }
@@ -132,6 +130,8 @@ namespace DataBase.UpdateItems
         public void Updated(object obj)
         {
             objects.Add(obj);
+            names.Add(comboBox_Items.SelectedItem.ToString());
+            ids.Add(Convert.ToInt32(id.Text));
         }
     }
 }
