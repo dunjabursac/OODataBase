@@ -468,11 +468,14 @@ namespace DataBase
         {
             List<object> allItems = new List<object>();
 
-            foreach(var kvp1 in Tables)
+            foreach(var kvp1 in TablesList)
             {
                 foreach (var kvp2 in kvp1.Value)
                 {
-                    allItems.Add(kvp2.Value);
+                    foreach(var listItem in kvp2.Value)
+                    {
+                        allItems.Add(listItem);
+                    }
                 }
             }
 
@@ -520,6 +523,455 @@ namespace DataBase
             {
                 stream.Write(version);
             }
+        }
+        
+        public List<object> GetItemsByType(string choosenType)
+        {
+            List<object> allItems = GetAllItems();
+            List<object> selectedItems = new List<object>();
+
+            switch(choosenType)
+            {
+                case "Computer":
+                    Computer currentComputer;
+                    foreach(var item in allItems)
+                    {
+                        try
+                        {
+                            currentComputer = (Computer)item;
+                            selectedItems.Add(currentComputer);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Appliances":
+                    Appliances currentAppliance;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentAppliance = (Appliances)item;
+                            selectedItems.Add(currentAppliance);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Phone":
+                    Phone currentPhone;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentPhone = (Phone)item;
+                            selectedItems.Add(currentPhone);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                // *********************************************************************************************************************************************
+
+                case "Laptop":
+                    Laptop currentLaptop;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentLaptop = (Laptop)item;
+                            selectedItems.Add(currentLaptop);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Desktop":
+                    Desktop currentDesktop;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentDesktop = (Desktop)item;
+                            selectedItems.Add(currentDesktop);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Tablet":
+                    Tablet currentTablet;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentTablet = (Tablet)item;
+                            selectedItems.Add(currentTablet);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                case "CoolingDevice":
+                    CoolingDevice currentCoolingDevice;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentCoolingDevice = (CoolingDevice)item;
+                            selectedItems.Add(currentCoolingDevice);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Machine":
+                    Machine currentMachine;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentMachine = (Machine)item;
+                            selectedItems.Add(currentMachine);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Cooking":
+                    Cooking currentCooking;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentCooking = (Cooking)item;
+                            selectedItems.Add(currentCooking);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                case "Landline":
+                    Landline currentLandline;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentLandline = (Landline)item;
+                            selectedItems.Add(currentLandline);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Mobile":
+                    Mobile currentMobile;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentMobile = (Mobile)item;
+                            selectedItems.Add(currentMobile);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                // *********************************************************************************************************************************************
+
+                case "AirConditioner":
+                    AirConditioner currentAirConditioner;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentAirConditioner = (AirConditioner)item;
+                            selectedItems.Add(currentAirConditioner);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Fridge":
+                    Fridge currentFridge;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentFridge = (Fridge)item;
+                            selectedItems.Add(currentFridge);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Freezer":
+                    Freezer currentFreezer;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentFreezer = (Freezer)item;
+                            selectedItems.Add(currentFreezer);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                case "WashingMachine":
+                    WashingMachine currentWashingMachine;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentWashingMachine = (WashingMachine)item;
+                            selectedItems.Add(currentWashingMachine);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "DryingMachine":
+                    DryingMachine currentDryingMachine;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentDryingMachine = (DryingMachine)item;
+                            selectedItems.Add(currentDryingMachine);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Dishwasher":
+                    Dishwasher currentDishwasher;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentDishwasher = (Dishwasher)item;
+                            selectedItems.Add(currentDishwasher);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                case "Cooker":
+                    Cooker currentCooker;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentCooker = (Cooker)item;
+                            selectedItems.Add(currentCooker);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Oven":
+                    Oven currentOven;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentOven = (Oven)item;
+                            selectedItems.Add(currentOven);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Microwave":
+                    Microwave currentMicrowave;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentMicrowave = (Microwave)item;
+                            selectedItems.Add(currentMicrowave);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                // *********************************************************************************************************************************************
+
+                case "Wireless":
+                    Wireless currentWireless;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentWireless = (Wireless)item;
+                            selectedItems.Add(currentWireless);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Wire":
+                    Wire currentWire;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentWire = (Wire)item;
+                            selectedItems.Add(currentWire);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                case "Smart":
+                    Smart currentSmart;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentSmart = (Smart)item;
+                            selectedItems.Add(currentSmart);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+                case "Regular":
+                    Regular currentRegular;
+                    foreach (var item in allItems)
+                    {
+                        try
+                        {
+                            currentRegular = (Regular)item;
+                            selectedItems.Add(currentRegular);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    break;
+
+                // *********************************************************************************************************************************************
+
+                // *********************************************************************************************************************************************
+                
+                default:
+                    selectedItems = allItems;
+                    break;
+            }
+
+            return selectedItems;
+        }
+
+        public List<object> GetItemsByTypeAndVersion(string choosenType, int version)
+        {
+            List<object> itemsByType = GetItemsByType(choosenType);
+            Dictionary<int, List<object>> versionsOfChoosenType = GetVersionsOfChoosenType(itemsByType);
+
+            List<object> retList = new List<object>();
+
+            foreach(var IdAndVersions in versionsOfChoosenType)
+            {
+                retList.Add(IdAndVersions.Value.Find(i => ((Item)i).Version <= version));
+            }
+
+            return retList;
+        }
+
+        public Dictionary<int, List<object>> GetVersionsOfChoosenType(List<object> itemsByType)
+        {
+            Dictionary<int, List<object>> versionsOfChoosenType = new Dictionary<int, List<object>>();
+            if(itemsByType.Count != 0)
+            {
+                int id = ((Item)itemsByType[0]).ID;
+
+                versionsOfChoosenType.Add(id, new List<object>());
+
+                foreach (object item in itemsByType)
+                {
+                    if (id != ((Item)item).ID)
+                    {
+                        id = ((Item)item).ID;
+                        versionsOfChoosenType.Add(id, new List<object>());
+                    }
+
+                    versionsOfChoosenType[id].Add(item);
+                }
+            }
+
+            return versionsOfChoosenType;
         }
     }
 }
