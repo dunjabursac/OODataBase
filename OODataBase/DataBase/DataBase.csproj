@@ -72,6 +72,9 @@
     <Compile Include="SelectItems.xaml.cs">
       <DependentUpon>SelectItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SelectPropertyValue.xaml.cs">
+      <DependentUpon>SelectPropertyValue.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Select\SAppliances.xaml.cs">
       <DependentUpon>SAppliances.xaml</DependentUpon>
     </Compile>
@@ -267,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SelectItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectPropertyValue.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

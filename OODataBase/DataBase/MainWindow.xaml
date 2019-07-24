@@ -13,13 +13,15 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Button Grid.Row="0" Width="200" Height="50" FontSize="16" Click="Button_Click_4">Update Item</Button>
         <Button Grid.Row="1" Width="200" Height="50" FontSize="16" Click="Button_Click">Add Item</Button>
         <Button Grid.Row="2" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_2">Delete Item</Button>
         <Button Grid.Row="3" Width="200" Height="50" FontSize="16" Click="Button_Click_1">Select Item</Button>
-        <Button Grid.Row="4" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_3">Read Item</Button>
+        <Button Grid.Row="4" Width="200" Height="50" FontSize="16" Click="Button_Click_5">Select PropertyValue</Button>
+        <Button Grid.Row="5" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_3">Read Item</Button>
         
     </Grid>
 </Window>
