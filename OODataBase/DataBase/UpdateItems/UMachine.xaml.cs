@@ -22,13 +22,14 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
-        int Version;
-        public UMachine(DBManager db, object obj, string name, int id)
+        UMultipleItems PWindow = null;
+
+        public UMachine(DBManager db, object obj, string name, int id, UMultipleItems window = null)
         {
             DB = db;
             ID = id;
             Name1 = name;
-            Version = ((Item)obj).Version;
+            PWindow = window;
             InitializeComponent();
 
             price.Text = ((Machine)obj).Price.ToString();
@@ -76,8 +77,15 @@ namespace DataBase.UpdateItems
                     NoiseLevel = Convert.ToInt32(noiseLevel.Text),
                 };
 
-                if (!DB.Update(Name1, ID, dishwasher))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(dishwasher);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, dishwasher))
+                        ret = false;
+                }
             }
             else if (Name1 == "WashingMachine")
             {
@@ -91,8 +99,15 @@ namespace DataBase.UpdateItems
                     NoiseLevel = Convert.ToInt32(noiseLevel.Text),
                 };
 
-                if (!DB.Update(Name1, ID, washingMachine))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(washingMachine);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, washingMachine))
+                        ret = false;
+                }
             }
             else
             {
@@ -107,31 +122,45 @@ namespace DataBase.UpdateItems
                     DryingMode = dryingMode.Text
                 };
 
-                if (!DB.Update(Name1, ID, dryingMachine))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(dryingMachine);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, dryingMachine))
+                        ret = false;
+                }
             }
 
-            if (!ret)
+            if (PWindow == null)
             {
-                MessageBoxResult result = MessageBox.Show("Unable to update item!",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Error);
-                if (result == MessageBoxResult.OK)
+                if (!ret)
                 {
-                    this.Close();
+                    MessageBoxResult result = MessageBox.Show("Unable to update item!",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Updated successfully",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("Updated successfully",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Information);
-                if (result == MessageBoxResult.OK)
-                {
-                    this.Close();
-                }
+                this.Close();
             }
         }
     }

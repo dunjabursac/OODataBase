@@ -126,6 +126,9 @@
     <Compile Include="UpdateItems\UMobile.xaml.cs">
       <DependentUpon>UMobile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UpdateItems\UMultipleItems.xaml.cs">
+      <DependentUpon>UMultipleItems.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddItems\AddAirConditioner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -339,6 +342,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UpdateItems\UMobile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateItems\UMultipleItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

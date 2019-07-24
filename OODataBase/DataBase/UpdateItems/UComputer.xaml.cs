@@ -22,8 +22,8 @@ namespace DataBase.UpdateItems
         DBManager DB;
         int ID;
         string Name1;
-        int Version;
-        public UComputer(DBManager db, object obj, string name, int id)
+        UMultipleItems PWindow = null;
+        public UComputer(DBManager db, object obj, string name, int id, UMultipleItems window = null)
         {
             InitializeComponent();
 
@@ -72,7 +72,7 @@ namespace DataBase.UpdateItems
             title.Content = name;
             DB = db;
             ID = id;
-            Version = ((Item)obj).Version;
+            PWindow = window;
             Name1 = name;
         }
 
@@ -94,8 +94,15 @@ namespace DataBase.UpdateItems
                     Resolution = resolution.Text
                 };
 
-                if (!DB.Update(Name1, ID, laptop))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(laptop);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, laptop))
+                        ret = false;
+                }
             }
             else if (Name1 == "Desktop")
             {
@@ -110,8 +117,15 @@ namespace DataBase.UpdateItems
                     PowerSupply = Convert.ToInt32(powerSupply.Text)
                 };
 
-                if (!DB.Update(Name1, ID, desktop))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(desktop);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, desktop))
+                        ret = false;
+                }
             }
             else
             {
@@ -127,31 +141,45 @@ namespace DataBase.UpdateItems
                     Resolution = resolution.Text
                 };
 
-                if (!DB.Update(Name1, ID, tablet))
-                    ret = false;
+                if (PWindow != null)
+                {
+                    PWindow.Updated(tablet);
+                }
+                else
+                {
+                    if (!DB.Update(Name1, ID, tablet))
+                        ret = false;
+                }
             }
 
-            if (!ret)
+            if (PWindow == null)
             {
-                MessageBoxResult result = MessageBox.Show("Unable to update item!",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Error);
-                if (result == MessageBoxResult.OK)
+                if (!ret)
                 {
-                    this.Close();
+                    MessageBoxResult result = MessageBox.Show("Unable to update item!",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Updated successfully",
+                                                      "Information",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("Updated successfully",
-                                                  "Information",
-                                                  MessageBoxButton.OK,
-                                                  MessageBoxImage.Information);
-                if (result == MessageBoxResult.OK)
-                {
-                    this.Close();
-                }
+                this.Close();
             }
         }
     }
