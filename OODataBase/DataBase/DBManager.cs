@@ -18,6 +18,8 @@ namespace DataBase
         private static Dictionary<string, List<string>> ParentChildren;
         private static int Version = 1;
 
+        private static object locker = new object();
+
 
         // Singleton *****************************************************************************
 
@@ -253,68 +255,61 @@ namespace DataBase
             return new List<string>(Tables.Keys);
         }
 
-        public bool Create(string name, object item, bool delOrUpd = false)
+        public bool Create(string name, object item)
         {
-            // Stara verzija
-            //if (Tables[name].Count != 0)
-            //{
-            //    ((Item)item).ID = ((Item)Tables[name].Last().Value).ID + 1;
-            //}
-            //else
-            //{
-            //    ((Item)item).ID = 0;
-            //}
-            //Tables[name].Add(((Item)item).ID, item);
-
-            if (TablesList[name].Count != 0)
-            {
-                ((Item)item).ID = ((Item)TablesList[name].Last().Value.FirstOrDefault()).ID + 1;
-            }
-            else
-            {
-                ((Item)item).ID = 0;
-            }
-
-            TablesList[name].Add(((Item)item).ID, new List<object>());
-            TablesList[name][((Item)item).ID].Add(item);
-
             bool ret = true;
-            string filename = name + ".xml";
-            const string wrapperTagName = "wrapper";
-            string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
-            string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
 
-            using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+            lock (TablesList[name])
             {
-                XmlWriter xml = null;
-                Type t = Type.GetType("DataBase." + name);
-                var serializer = new XmlSerializer(t);
-                if (stream.Length == 0)
+                if (TablesList[name].Count != 0)
                 {
-                    xml = XmlWriter.Create(stream);
-                    xml.WriteStartDocument();
-                    xml.WriteRaw(wrapperStartTag);
+                    ((Item)item).ID = ((Item)TablesList[name].Last().Value.FirstOrDefault()).ID + 1;
                 }
                 else
                 {
-                    xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
-                    var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
-                    var buffer = new byte[bufferLength];
-                    stream.Position = stream.Length - bufferLength;
-                    stream.Read(buffer, 0, bufferLength);
-                    if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
+                    ((Item)item).ID = 0;
+                }
+
+                TablesList[name].Add(((Item)item).ID, new List<object>());
+                TablesList[name][((Item)item).ID].Add(item);
+
+                string filename = name + ".xml";
+                const string wrapperTagName = "wrapper";
+                string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
+                string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
+
+                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+                {
+                    XmlWriter xml = null;
+                    Type t = Type.GetType("DataBase." + name);
+                    var serializer = new XmlSerializer(t);
+                    if (stream.Length == 0)
                     {
-                        ret = false;
+                        xml = XmlWriter.Create(stream);
+                        xml.WriteStartDocument();
+                        xml.WriteRaw(wrapperStartTag);
                     }
                     else
                     {
-                        stream.SetLength(stream.Length - bufferLength);
+                        xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
+                        var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
+                        var buffer = new byte[bufferLength];
+                        stream.Position = stream.Length - bufferLength;
+                        stream.Read(buffer, 0, bufferLength);
+                        if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
+                        {
+                            ret = false;
+                        }
+                        else
+                        {
+                            stream.SetLength(stream.Length - bufferLength);
+                        }
                     }
-                }
 
-                serializer.Serialize(xml, item);
-                xml.WriteRaw(wrapperEndTag);
-                xml.Close();
+                    serializer.Serialize(xml, item);
+                    xml.WriteRaw(wrapperEndTag);
+                    xml.Close();
+                }
             }
 
             return ret;
@@ -324,69 +319,41 @@ namespace DataBase
         {
             bool ret = true;
 
-            //if (!Tables.ContainsKey(name))
-            //{
-            //    ret = false;
-            //}
-            //else if (!Tables[name].ContainsKey(id))
-            //{
-            //    ret = false;
-            //}
-            //else
-            //{
-            //    if (!Tables[name].Remove(id))
-            //    {
-            //        ret = false;
-            //    }
-            //}
 
-            if (!TablesList.ContainsKey(name))
+            lock (TablesList[name][id])
             {
-                ret = false;
-            }
-            else if (!TablesList[name].ContainsKey(id))
-            {
-                ret = false;
-            }
-            else
-            {
-                object obj = TablesList[name][id].Find(i => ((Item)i).Version == version);
-                if (!TablesList[name][id].Remove(obj))
+                if (!TablesList.ContainsKey(name))
                 {
                     ret = false;
                 }
+                else if (!TablesList[name].ContainsKey(id))
+                {
+                    ret = false;
+                }
+                else
+                {
+                    object obj = TablesList[name][id].Find(i => ((Item)i).Version <= version);
+                    if (!TablesList[name][id].Remove(obj))
+                    {
+                        ret = false;
+                    }
+                }
             }
 
-            StreamWriter streamWriter = new StreamWriter(name + ".xml");
-            streamWriter.Close();
-            //Tables[name] = new Dictionary<int, object>();
+            lock (locker)
+            {
+                StreamWriter streamWriter = new StreamWriter(name + ".xml");
+                streamWriter.Close();
 
-            //foreach (var item in Tables[name])
-            //{
-            //    Create(name, item.Value, true);
-            //}
-
-            RefreshXml(name);
-
+                RefreshXml(name);
+            }
+            
             return ret;
         }
 
         public object Read(string name, int id, int version)
         {
             object ret = new object();
-
-            //if (!Tables.ContainsKey(name))
-            //{
-            //    ret = null;
-            //}
-            //else if (!Tables[name].ContainsKey(id))
-            //{
-            //    ret = null;
-            //}
-            //else
-            //{
-            //    ret = (Tables[name])[id];
-            //}
 
             if (!TablesList.ContainsKey(name))
             {
@@ -408,46 +375,33 @@ namespace DataBase
         {
             bool ret = true;
 
-            //if (!Tables.ContainsKey(name))
-            //{
-            //    ret = false;
-            //}
-            //else if (!Tables[name].ContainsKey(id))
-            //{
-            //    ret = false;
-            //}
-            //else
-            //{
-            //    ((Item)obj).ID = id;
-            //    Tables[name][id] = obj;
-            //}
-
-            if (!TablesList.ContainsKey(name))
+            lock(TablesList[name][id])
             {
-                ret = false;
-            }
-            else if (!TablesList[name].ContainsKey(id))
-            {
-                ret = false;
-            }
-            else
-            {
-                ((Item)obj).ID = id;
-                ((Item)obj).Version = Version;
-                TablesList[name][id].Insert(0, obj);
-                Version++;
-                WriteVersion(Version);
+                if (!TablesList.ContainsKey(name))
+                {
+                    ret = false;
+                }
+                else if (!TablesList[name].ContainsKey(id))
+                {
+                    ret = false;
+                }
+                else
+                {
+                    ((Item)obj).ID = id;
+                    ((Item)obj).Version = Version;
+                    TablesList[name][id].Insert(0, obj);
+                    Version++;
+                    WriteVersion(Version);
+                }
             }
 
-            StreamWriter streamWriter = new StreamWriter(name + ".xml");
-            streamWriter.Close();
+            lock(locker)
+            {
+                StreamWriter streamWriter = new StreamWriter(name + ".xml");
+                streamWriter.Close();
 
-            //foreach (var item in Tables[name])
-            //{
-            //    Create(name, item.Value, true);
-            //}
-
-            RefreshXml(name);
+                RefreshXml(name);
+            }
 
             return ret;
         }
@@ -477,9 +431,12 @@ namespace DataBase
             {
                 for (int i = 0; i < names.Count; i++)
                 {
-                    ((Item)objects[i]).ID = ids[i];
-                    ((Item)objects[i]).Version = Version;
-                    TablesList[names[i]][ids[i]].Insert(0, objects[i]);
+                    lock(TablesList[names[i]][ids[i]])
+                    {
+                        ((Item)objects[i]).ID = ids[i];
+                        ((Item)objects[i]).Version = Version;
+                        TablesList[names[i]][ids[i]].Insert(0, objects[i]);
+                    }
                 }
                 Version++;
                 WriteVersion(Version);
@@ -487,10 +444,13 @@ namespace DataBase
 
             foreach (string name in names)
             {
-                StreamWriter streamWriter = new StreamWriter(name + ".xml");
-                streamWriter.Close();
+                lock(locker)
+                {
+                    StreamWriter streamWriter = new StreamWriter(name + ".xml");
+                    streamWriter.Close();
 
-                RefreshXml(name);
+                    RefreshXml(name);
+                }
             }
 
             return ret;
@@ -1055,6 +1015,8 @@ namespace DataBase
                     {
                         if (descriptor.Name == property)
                         {
+                            // ne treba validacija ? 
+
                             if (descriptor.GetValue(item).ToString() == value)
                             {
                                 itemsByTypeAndProperty.Add(item);

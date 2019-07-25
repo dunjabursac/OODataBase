@@ -138,6 +138,7 @@ namespace DataBase
             {
                 inputVersion = Int32.MaxValue;
             }
+           
 
             if (value.Text == "" && property.SelectedValue != null)
             {
@@ -157,6 +158,17 @@ namespace DataBase
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            area.SelectedValue = null;
+            category.SelectedValue = null;
+            option.SelectedValue = null;
+
+            property.SelectedValue = null;
+            value.Text = "";
+            version.Text = "";
         }
     }
 }
