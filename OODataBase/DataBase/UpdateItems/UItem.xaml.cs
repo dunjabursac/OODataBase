@@ -86,7 +86,7 @@ namespace DataBase.UpdateItems
 
                         Type t = Type.GetType("DataBase." + selected).BaseType;
                         Type t2 = Type.GetType("DataBase.UpdateItems.U" + t.Name);
-                        var updateItem = (Window)Activator.CreateInstance(t2, DB, obj, comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text));
+                        var updateItem = (Window)Activator.CreateInstance(t2, DB, obj, comboBox_Items.SelectedItem.ToString(), Convert.ToInt32(id.Text), null);
                         updateItem.Show();
                     }
                 }

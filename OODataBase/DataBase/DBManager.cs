@@ -18,10 +18,38 @@ namespace DataBase
         private static Dictionary<string, List<string>> ParentChildren;
         private static int Version = 1;
 
-        public DBManager()
+
+        // Singleton *****************************************************************************
+
+        private static DBManager DBM_instance = null;
+
+        private DBManager()
         {
             CreateTables();
         }
+
+        public static DBManager DBM_Instance
+        {
+            get
+            {
+                if(DBM_instance == null)
+                {
+                    DBM_instance = new DBManager();
+                }
+
+                return DBM_instance;
+            }
+        }
+
+
+        //private static readonly DBManager DBM_instance = new DBManager();
+
+        //public static DBManager GetDBM_instance()
+        //{
+        //    return DBM_instance;
+        //}
+
+        // ***************************************************************************************
 
         private void CreateTables()
         {
@@ -954,9 +982,30 @@ namespace DataBase
             return retList;
         }
 
+        public Dictionary<string, List<object>> GetDictionaryByLiefType(List<object> selectedItems)
+        {
+            Dictionary<string, List<object>> retDictionary = new Dictionary<string, List<object>>();
+            string currentItemType = "";
+
+            foreach(var item in selectedItems)
+            {
+                currentItemType = item.GetType().ToString().Split('.').Last();
+
+                if(!retDictionary.ContainsKey(currentItemType))
+                {
+                    retDictionary.Add(currentItemType, new List<object>());
+                }
+
+                retDictionary[currentItemType].Add(item);
+            }
+
+            return retDictionary;
+        }
+
         public Dictionary<int, List<object>> GetVersionsOfChoosenType(List<object> itemsByType)
         {
             Dictionary<int, List<object>> versionsOfChoosenType = new Dictionary<int, List<object>>();
+
             if(itemsByType.Count != 0)
             {
                 int id = ((Item)itemsByType[0]).ID;
@@ -968,7 +1017,11 @@ namespace DataBase
                     if (id != ((Item)item).ID)
                     {
                         id = ((Item)item).ID;
-                        versionsOfChoosenType.Add(id, new List<object>());
+
+                        if (!versionsOfChoosenType.ContainsKey(((Item)item).ID))
+                        {
+                            versionsOfChoosenType.Add(id, new List<object>());
+                        }
                     }
 
                     versionsOfChoosenType[id].Add(item);
@@ -980,16 +1033,23 @@ namespace DataBase
 
         public List<object> Select(string choosenType, string property, string value, int version)
         {
-            List<object> itemsByTypeAndVersion = GetItemsByTypeAndVersion(choosenType, version);
-            List<object> itemsByTypeVersionAndProperty = new List<object>();
+            List<object> itemsByType = GetItemsByType(choosenType);
+            List<object> itemsByTypeAndProperty = new List<object>();
+            
+            Dictionary<int, List<object>> itemsByTypePropertyAndVersion = new Dictionary<int, List<object>>();
+            Dictionary<string, List<object>> magicalDictionary;
+
+            List<object> retList = new List<object>();
 
             if (property == "")
             {
-                itemsByTypeVersionAndProperty = itemsByTypeAndVersion;
+                itemsByTypeAndProperty = itemsByType;
+
+
             }
             else
             {
-                foreach (var item in itemsByTypeAndVersion)
+                foreach (var item in itemsByType)
                 {
                     foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(item))
                     {
@@ -997,7 +1057,7 @@ namespace DataBase
                         {
                             if (descriptor.GetValue(item).ToString() == value)
                             {
-                                itemsByTypeVersionAndProperty.Add(item);
+                                itemsByTypeAndProperty.Add(item);
                                 break;
                             }
                         }
@@ -1005,7 +1065,18 @@ namespace DataBase
                 }
             }
 
-            return itemsByTypeVersionAndProperty;
+            magicalDictionary = GetDictionaryByLiefType(itemsByTypeAndProperty);
+            foreach(var magical_kvp in magicalDictionary)
+            {
+                itemsByTypePropertyAndVersion = GetVersionsOfChoosenType(magical_kvp.Value);
+
+                foreach (var kvp in itemsByTypePropertyAndVersion)
+                {
+                    retList.Add(kvp.Value.Find(i => ((Item)i).Version <= version));
+                }
+            }
+
+            return retList;
         }
     }
 }

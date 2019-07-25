@@ -29,7 +29,7 @@ namespace DataBase
     /// </summary>
     public partial class MainWindow : Window
     {
-        public DBManager db = new DBManager();
+        public DBManager db = DBManager.DBM_Instance;
 
         public MainWindow()
         {

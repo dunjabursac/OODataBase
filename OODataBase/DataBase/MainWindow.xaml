@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBase"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="400">
+        Title="MainWindow" Height="650" Width="400">
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -15,14 +15,16 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Width="200" Height="50" FontSize="16" Click="Button_Click_4">Update Item</Button>
-        <Button Grid.Row="1" Width="200" Height="50" FontSize="16" Click="Button_Click">Add Item</Button>
-        <Button Grid.Row="2" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_2">Delete Item</Button>
-        <Button Grid.Row="3" Width="200" Height="50" FontSize="16" Click="Button_Click_1">Select Item</Button>
-        <Button Grid.Row="4" Width="200" Height="50" FontSize="16" Click="Button_Click_5">Select PropertyValue</Button>
-        <Button Grid.Row="5" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_3">Read Item</Button>
-        <Button Grid.Row="6" Width="200" Height="50" FontSize="16" Click="Button_Click_6">Update Multiple Items</Button>
+        <Button Grid.Row="0" Width="200" Height="50" FontSize="16" Click="Button_Click">Add Item</Button>
+        <Button Grid.Row="1" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_3">Read Item</Button>
+        <Button Grid.Row="2" Width="200" Height="50" FontSize="16" Click="Button_Click_4">Update Item</Button>
+        <Button Grid.Row="3" Width="200" Height="50" FontSize="16" Click="Button_Click_6">Update Multiple Items</Button>
+        <Button Grid.Row="4" Width="200" Height="50" FontSize="16" Click="Button_Click_5">Select Multiple Items</Button>
+        <Button Grid.Row="5" FontSize="16" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="200" Click="Button_Click_2">Delete Item</Button>
+        
+        <Button Grid.Row="7" Width="200" Height="50" FontSize="16" Click="Button_Click_1" Background="Red">Select?</Button>
     </Grid>
 </Window>
