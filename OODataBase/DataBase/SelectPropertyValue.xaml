@@ -42,13 +42,15 @@
         <ComboBox Grid.Row="4" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="category" SelectionChanged="Category_SelectionChanged" ItemsSource="{Binding Categories}" />
         <ComboBox Grid.Row="6" Grid.Column="1" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="option" ItemsSource="{Binding Options}" />
 
-        <Button Grid.Row="8" Grid.ColumnSpan="2" Height="50" Width="150" FontSize="16" Click="Button_Click">Choose</Button>
+        <Button Grid.Row="8" Grid.ColumnSpan="2" Height="50" Width="150" FontSize="16" Click="Button_Click" FontWeight="Bold">Choose</Button>
 
         <ComboBox Grid.Row="2" Grid.Column="3" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="property" ItemsSource="{Binding Properties}" />
         <TextBox Grid.Row="4" Grid.Column="3" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="value"></TextBox>
         <TextBox Grid.Row="6" Grid.Column="3" Margin="10 5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" Name="version"></TextBox>
 
-        <Button Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" Height="50" Width="150" FontSize="16" Click="Button_Click_1">Select</Button>
+        <Button Grid.Row="8" Grid.Column="2" Height="50" Width="150" FontSize="16" FontWeight="Bold" Background="IndianRed" Click="Button_Click_2">Reset</Button>
+        <Button Grid.Row="8" Grid.Column="3" Height="50" Width="150" FontSize="16" FontWeight="Bold" Background="MediumSeaGreen" Click="Button_Click_1">Select</Button>
+        
 
     </Grid>
 </Window>
