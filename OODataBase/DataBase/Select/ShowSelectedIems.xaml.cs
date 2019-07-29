@@ -30,6 +30,9 @@ namespace DataBase.Select
 
             foreach (object obj in selectedItems)
             {
+                item.Text += "--- ";
+                item.Text += obj.GetType().ToString().Split('.').Last() + " ---\n";
+
                 foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(obj))
                 {
                     item.Text += descriptor.Name + " : " + descriptor.GetValue(obj) + "\n";
