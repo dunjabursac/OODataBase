@@ -108,6 +108,7 @@
     <Compile Include="Select\SPhone.xaml.cs">
       <DependentUpon>SPhone.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Transaction.cs" />
     <Compile Include="UpdateItems\UComputer.xaml.cs">
       <DependentUpon>UComputer.xaml</DependentUpon>
     </Compile>

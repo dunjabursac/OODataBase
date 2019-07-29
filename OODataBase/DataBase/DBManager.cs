@@ -300,6 +300,7 @@ namespace DataBase
                     ((Item)item).ID = 0;
                 }
 
+                ((Item)item).Version = Version - 1;
                 TablesList[name].Add(((Item)item).ID, new List<object>());
                 TablesList[name][((Item)item).ID].Add(item);
 
