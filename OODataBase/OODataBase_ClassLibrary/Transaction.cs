@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataBase
+namespace OODataBase_ClassLibrary
 {
     public class Transaction
     {
-        private DBManager db = DBManager.DBM_Instance;
+        public static DBManager db;
         
         private Dictionary<string, Dictionary<int, List<object>>> TablesList_T;
         private Dictionary<string, List<string>> ParentChildren_T;
@@ -26,17 +26,21 @@ namespace DataBase
 
         public Transaction()
         {
+            db = DBManager.DBM_Instance;
             transactionID = db.GetTransactionID();
 
             TablesList_T = new Dictionary<string, Dictionary<int, List<object>>>();
             ParentChildren_T = db.GetParentChildren();
 
             Operations = new List<Tuple<string, object>>();
+            InverseOperations = new List<Tuple<string, object>>();
         }
 
         
         public bool Create(object item)
         {
+            Console.WriteLine("Transaction_" + this.transactionID + " is creating item ...");
+
             bool ret = true;
 
             if (transactionValid && transactionBegun)
@@ -77,6 +81,8 @@ namespace DataBase
 
         public object Read(string name, int id, int version)
         {
+            Console.WriteLine("Transaction_" + transactionID + " is reading item ...");
+
             object ret = new object();
 
             if (transactionValid && transactionBegun)
@@ -108,6 +114,8 @@ namespace DataBase
 
         public bool Update(object item)
         {
+            Console.WriteLine("Transaction_" + transactionID + " is updating item ...");
+
             bool ret = true;
 
             if(transactionValid && transactionBegun)
@@ -118,8 +126,7 @@ namespace DataBase
 
                 if (db.LockItem(name, id, transactionID))
                 {
-                    ((Item)item).Version = Version;
-                    foreach(var op in Operations)
+                    foreach (var op in Operations)
                     {
                         opName = op.Item2.GetType().ToString().Split('.').Last() + ((Item)op.Item2).ID.ToString();
 
@@ -131,7 +138,8 @@ namespace DataBase
                             break;
                         }
                     }
-
+                    ((Item)item).Version = Version;
+                    
                     (TablesList_T[name][id]).Insert(0, item);
                     Operations.Add(Tuple.Create("update", item));
                 }
@@ -152,6 +160,8 @@ namespace DataBase
 
         public bool Delete(string name, int id, int version)
         {
+            Console.WriteLine("Transaction_" + transactionID + " is deleting item ...");
+
             bool ret = true;
 
             if (transactionValid && transactionBegun)
@@ -199,6 +209,8 @@ namespace DataBase
 
         public List<object> Select(string choosenType, string property, string value, int version)
         {
+            Console.WriteLine("Transaction_" + transactionID + " is selecting items ...");
+
             List<object> selectedItems = new List<object>();
 
             if (transactionValid && transactionBegun)
@@ -275,11 +287,13 @@ namespace DataBase
             // take snapshot of database
             // (read from .xml files)
 
+            Console.WriteLine("Transaction_" + transactionID + " is BEGINING ...");
+
             bool ret = true;
 
             if(!transactionBegun)
             {
-                TablesList_T = db.GetTablesList();
+                TablesList_T = new Dictionary<string, Dictionary<int, List<object>>> (db.GetTablesList());
                 transactionBegun = true;
                 Version = db.VersionProperty;
             }
@@ -299,13 +313,15 @@ namespace DataBase
 
             bool ret = true;
 
-            if(transactionValid)
+            if (transactionValid)
             {
+                Console.WriteLine("Transaction_" + transactionID + " is COMMITING changes ...");
+
                 string name;
                 int id;
                 int version;
 
-                foreach(var operation in Operations)
+                foreach (var operation in Operations)
                 {
                     // poziv metoda iz db-a
 
@@ -329,7 +345,7 @@ namespace DataBase
                             break;
 
                         case "delete":
-                            if(!db.Delete(name, id, version))
+                            if (!db.Delete(name, id, version))
                             {
                                 Rollback();
                                 ret = false;
@@ -362,7 +378,10 @@ namespace DataBase
 
                 db.UnlockItems(transactionID, Version);
             }
-
+            else
+            {
+                Console.WriteLine("Transaction_" + transactionID + " is NOT COMMITING changes ...");
+            }
             // all operations from Transaction were successfull
 
             Reset();
@@ -374,6 +393,8 @@ namespace DataBase
         {
             // at any point in Transaction
             // (some operation went wrong, go back to BEGIN state)
+
+            Console.WriteLine("Transaction_" + transactionID + " is ROLLING BACK changes ...");
 
             string name;
             int id;
@@ -413,7 +434,7 @@ namespace DataBase
 
 
 
-        public void Reset()
+        private void Reset()
         {
             Operations = new List<Tuple<string, object>>();
             InverseOperations = new List<Tuple<string, object>>();

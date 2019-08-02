@@ -10,7 +10,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace DataBase
+namespace OODataBase_ClassLibrary
 {
     public class DBManager
     {
@@ -19,8 +19,8 @@ namespace DataBase
 
         private List<Tuple<bool, int, List<object>>> LockedList;
 
-        private int Version = 1;
-        private int TransactionID = 0;
+        private static int Version = 1;
+        private static int TransactionID = 0;
         
         private static object TansactionID_lock = new object();
 
@@ -47,7 +47,10 @@ namespace DataBase
         }
 
 
-        public int VersionProperty { get; }
+        public int VersionProperty
+        {
+            get { return Version; }
+        }
 
 
 
@@ -112,7 +115,7 @@ namespace DataBase
                     {
                         string currwntClassName = ((XmlSchemaComplexType)myschema.Items[i]).Name;
 
-                        Type type = Type.GetType($"DataBase.{currwntClassName}");
+                        Type type = Type.GetType($"OODataBase_ClassLibrary.{currwntClassName}");
                         if (type != null && type.Name != "Item")
                         {
                             var currentClassInstance = Activator.CreateInstance(type);
@@ -140,8 +143,8 @@ namespace DataBase
                     }
 
 
-                    Console.WriteLine(e1.InnerException);
-                    Console.WriteLine(e1.StackTrace);
+                    //Console.WriteLine(e1.InnerException);
+                    //Console.WriteLine(e1.StackTrace);
                     continue;
                 }
             }
@@ -167,7 +170,7 @@ namespace DataBase
             {
                 using (var xml = new XmlTextReader(item.Key + ".xml"))
                 {
-                    Type t2 = Type.GetType("DataBase." + item.Key);
+                    Type t2 = Type.GetType("OODataBase_ClassLibrary." + item.Key);
                     XmlSerializer xd = new XmlSerializer(t2);
                     try
                     {
@@ -271,7 +274,25 @@ namespace DataBase
 
         public Dictionary<string, Dictionary<int, List<object>>> GetTablesList()
         {
-            return TablesList;
+            Dictionary<string, Dictionary<int, List<object>>> dict = new Dictionary<string, Dictionary<int, List<object>>>();
+
+            foreach(var kvp1 in TablesList)
+            {
+                dict.Add(kvp1.Key, new Dictionary<int, List<object>>());
+
+                foreach(var kvp2 in kvp1.Value)
+                {
+                    dict[kvp1.Key].Add(kvp2.Key, new List<object>());
+
+                    foreach(var item in kvp2.Value)
+                    {
+                        dict[kvp1.Key][kvp2.Key].Add(item);
+                    }
+                }
+            }
+
+
+            return dict;
         }
 
         public List<string> GetLeavesName()
@@ -306,7 +327,16 @@ namespace DataBase
             lock (TablesList[name])
             {
                 ret = true;
-                
+
+                if (TablesList[name].Count != 0)
+                {
+                    ((Item)item).ID = ((Item)TablesList[name].Last().Value.FirstOrDefault()).ID + 1;
+                }
+                else
+                {
+                    ((Item)item).ID = 0;
+                }
+
                 TablesList[name].Add(((Item)item).ID, new List<object>());
                 TablesList[name][((Item)item).ID].Add(item);
 
@@ -318,7 +348,7 @@ namespace DataBase
                 using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                 {
                     XmlWriter xml = null;
-                    Type t = Type.GetType("DataBase." + name);
+                    Type t = Type.GetType("OODataBase_ClassLibrary." + name);
                     var serializer = new XmlSerializer(t);
                     if (stream.Length == 0)
                     {
@@ -394,21 +424,10 @@ namespace DataBase
 
             if (Monitor.IsEntered(TablesList[name][id]))
             {
-                //if (!TablesList.ContainsKey(name))
-                //{
-                //    ret = false;
-                //}
-                //else if (!TablesList[name].ContainsKey(id))
-                //{
-                //    ret = false;
-                //}
-                //else
-                //{
-
                 lastValidVersion = TablesList[name][id].FirstOrDefault();
-                TablesList[name][id].Insert(0, obj);    // INSERT is used for adding the newest version at begining of the list of items
-                
-                //}
+                //((Item)obj).Version = ((Item)lastValidVersion).Version + 1;
+
+                TablesList[name][id].Insert(0, obj);   
                 RefreshXml(name);
             }
 
@@ -474,7 +493,7 @@ namespace DataBase
                 using (var stream = File.Open(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
                 {
                     XmlWriter xml = null;
-                    Type t = Type.GetType("DataBase." + name);
+                    Type t = Type.GetType("OODataBase_ClassLibrary." + name);
                     var serializer = new XmlSerializer(t);
                     xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true, ConformanceLevel = ConformanceLevel.Fragment, CloseOutput = false });
                     
@@ -516,8 +535,14 @@ namespace DataBase
 
                     try
                     {
-                        Monitor.Enter(TablesList[name][id], ref partOfTuple);
-                        LockedList.Add(Tuple.Create(partOfTuple, transactionID, TablesList[name][id]));
+                        if (Monitor.TryEnter(TablesList[name][id], 5))
+                        {
+                            LockedList.Add(Tuple.Create(partOfTuple, transactionID, TablesList[name][id]));
+                        }
+                        else
+                        {
+                            ret = false;
+                        }
                     }
                     catch
                     {
@@ -550,12 +575,7 @@ namespace DataBase
 
         public int GetTransactionID()
         {
-            lock(TansactionID_lock)
-            {
-                TransactionID++;
-
-                return TransactionID;
-            }
+            return Interlocked.Increment(ref TransactionID);
         }
     }
 }
