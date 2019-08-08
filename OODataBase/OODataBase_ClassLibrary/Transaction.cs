@@ -69,7 +69,7 @@ namespace OODataBase_ClassLibrary
                 {
                     if (TablesList_T[name].Count != 0)
                     {
-                        ((Item)item).ID = ((Item)TablesList_T[name].Last().Value.FirstOrDefault()).ID + 1;
+                        ((Item)item).ID = TablesList_T[name].Last().Key + 1;
                     }
                     else
                     {

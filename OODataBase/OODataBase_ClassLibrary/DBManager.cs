@@ -347,7 +347,7 @@ namespace OODataBase_ClassLibrary
                 {
                     if (TablesList[name].Count != 0)
                     {
-                        ((Item)item).ID = ((Item)TablesList[name].Last().Value.versionsList.FirstOrDefault()).ID + 1;
+                        ((Item)item).ID = TablesList[name].Last().Key + 1;
                     }
                     else
                     {
@@ -369,55 +369,13 @@ namespace OODataBase_ClassLibrary
                     TablesList[name][((Item)item).ID].Create(item);
 
                     RefreshXml(name);
-
-                    //string filename = name + ".xml";
-                    //const string wrapperTagName = "wrapper";
-                    //string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
-                    //string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
-
-
-                    //lock (syncXML)
-                    //{
-                    //    using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-                    //    {
-                    //        XmlWriter xml = null;
-                    //        Type t = Type.GetType("OODataBase_ClassLibrary." + name);
-                    //        var serializer = new XmlSerializer(t);
-                    //        if (stream.Length == 0)
-                    //        {
-                    //            xml = XmlWriter.Create(stream);
-                    //            xml.WriteStartDocument();
-                    //            xml.WriteRaw(wrapperStartTag);
-                    //        }
-                    //        else
-                    //        {
-                    //            xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
-                    //            var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
-                    //            var buffer = new byte[bufferLength];
-                    //            stream.Position = stream.Length - bufferLength;
-                    //            stream.Read(buffer, 0, bufferLength);
-                    //            if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
-                    //            {
-                    //                ret = -1;
-                    //            }
-                    //            else
-                    //            {
-                    //                stream.SetLength(stream.Length - bufferLength);
-                    //            }
-                    //        }
-
-                    //        serializer.Serialize(xml, item);
-                    //        xml.WriteRaw(wrapperEndTag);
-                    //        xml.Close();
-                    //    }
-                    //}
                 }
             }
 
             return ret;
         }
 
-        // TO DELETE ?????? 
+        
         public void CreateFromRollback(string name, object item)
         {
             lock (syncCreate)
@@ -627,6 +585,8 @@ namespace OODataBase_ClassLibrary
                         }
                     }
                 }
+
+                LockedList.RemoveAll(x => x.Item2 == transactionID);
             }
 
             if(transactionVersion > Version)
