@@ -14,16 +14,20 @@ namespace OODataBase_ClassLibrary
 {
     public class DBManager
     {
-        private Dictionary<string, Dictionary<int, List<object>>> TablesList;
+        private static Dictionary<string, Dictionary<int, VersionsList>> TablesList;
         private Dictionary<string, List<string>> ParentChildren;
 
-        private List<Tuple<bool, int, List<object>>> LockedList;
+        private List<Tuple<bool, int, ReaderWriterLockSlim>> LockedList;
 
         private static int Version = 1;
         private static int TransactionID = 0;
-        
-        private static object TansactionID_lock = new object();
 
+        private static ReaderWriterLockSlim XML_lock = new ReaderWriterLockSlim();
+        private static object syncInstance = new object();
+        private static object syncCreate = new object();
+        private static object syncLock = new object();
+        private static object syncXML = new object();
+        private static object syncGetTables = new object();
         
 
         private static DBManager DBM_instance = null;
@@ -39,7 +43,13 @@ namespace OODataBase_ClassLibrary
             {
                 if(DBM_instance == null)
                 {
-                    DBM_instance = new DBManager();
+                    lock(syncInstance)
+                    {
+                        if (DBM_instance == null)
+                        {
+                            DBM_instance = new DBManager();
+                        }
+                    }
                 }
 
                 return DBM_instance;
@@ -68,12 +78,12 @@ namespace OODataBase_ClassLibrary
                 WriteVersion(Version);
             }
 
-            TablesList = new Dictionary<string, Dictionary<int, List<object>>>();
+            TablesList = new Dictionary<string, Dictionary<int, VersionsList>>();
 
             ParentChildren = new Dictionary<string, List<string>>();
             ParentChildren.Add("Item", new List<string>());
 
-            LockedList = new List<Tuple<bool, int, List<object>>>();
+            LockedList = new List<Tuple<bool, int, ReaderWriterLockSlim>>();
 
             // reading from .xsd file
             XmlSchema myschema;
@@ -99,7 +109,7 @@ namespace OODataBase_ClassLibrary
                     {
                         string className = ((XmlSchemaElement)myschema.Items[i]).SchemaTypeName.Name;
                         
-                        TablesList.Add(className, new Dictionary<int, List<object>>());
+                        TablesList.Add(className, new Dictionary<int, VersionsList>());
                         if (!File.Exists(className + ".xml"))
                         {
                             StreamWriter streamWriter = new StreamWriter(className + ".xml");
@@ -132,8 +142,6 @@ namespace OODataBase_ClassLibrary
                                 ParentChildren[currentClassParentName].Add(currwntClassName);
                             }
                         }
-
-
                     }
                     catch (Exception e2)
                     {
@@ -141,7 +149,6 @@ namespace OODataBase_ClassLibrary
                         Console.WriteLine(e2.StackTrace);
                         continue;
                     }
-
 
                     //Console.WriteLine(e1.InnerException);
                     //Console.WriteLine(e1.StackTrace);
@@ -155,10 +162,18 @@ namespace OODataBase_ClassLibrary
         void WriteVersion(int version)
         {
             // deleting current data in .txt file and write new data in it
+            XML_lock.EnterWriteLock();
 
-            using (StreamWriter stream = new StreamWriter("Version.txt", false))
+            try
             {
-                stream.Write(version);
+                using (StreamWriter stream = new StreamWriter("Version.txt", false))
+                {
+                    stream.Write(version);
+                }
+            }
+            finally
+            {
+                XML_lock.ExitWriteLock();
             }
         }
 
@@ -204,10 +219,10 @@ namespace OODataBase_ClassLibrary
                             numOfTry = 0;
                             if (!TablesList[item.Key].ContainsKey(((Item)obj).ID))
                             {
-                                TablesList[item.Key].Add(((Item)obj).ID, new List<object>());
+                                TablesList[item.Key].Add(((Item)obj).ID, new VersionsList());
                             }
                             
-                            TablesList[item.Key][((Item)obj).ID].Insert(0, obj);
+                            TablesList[item.Key][((Item)obj).ID].Create(obj, true);
                         }
                     }
                 }
@@ -220,12 +235,11 @@ namespace OODataBase_ClassLibrary
         {
             // sorting items by versions - HIGHER to LOWER
 
-            foreach (var item in TablesList)
+            foreach (var liefType in TablesList)
             {
-                Dictionary<int, List<object>> tmp = new Dictionary<int, List<object>>(item.Value);
-                foreach (var value in tmp)
+                foreach (var value in liefType.Value)
                 {
-                    TablesList[item.Key][value.Key] = value.Value.OrderByDescending(i => ((Item)i).Version).ToList();
+                    TablesList[liefType.Key][value.Key].OrderByVersion();
                 }
             }
         }
@@ -274,25 +288,28 @@ namespace OODataBase_ClassLibrary
 
         public Dictionary<string, Dictionary<int, List<object>>> GetTablesList()
         {
-            Dictionary<string, Dictionary<int, List<object>>> dict = new Dictionary<string, Dictionary<int, List<object>>>();
-
-            foreach(var kvp1 in TablesList)
+            lock (syncGetTables)
             {
-                dict.Add(kvp1.Key, new Dictionary<int, List<object>>());
+                Dictionary<string, Dictionary<int, List<object>>> dict = new Dictionary<string, Dictionary<int, List<object>>>();
 
-                foreach(var kvp2 in kvp1.Value)
+                foreach (var kvp1 in TablesList)
                 {
-                    dict[kvp1.Key].Add(kvp2.Key, new List<object>());
+                    dict.Add(kvp1.Key, new Dictionary<int, List<object>>());
 
-                    foreach(var item in kvp2.Value)
+                    foreach (var kvp2 in kvp1.Value)
                     {
-                        dict[kvp1.Key][kvp2.Key].Add(item);
+                        dict[kvp1.Key].Add(kvp2.Key, new List<object>());
+
+                        foreach (var item in kvp2.Value.versionsList)
+                        {
+                            dict[kvp1.Key][kvp2.Key].Add(item);
+                        }
                     }
                 }
-            }
-
+            
 
             return dict;
+            }
         }
 
         public List<string> GetLeavesName()
@@ -308,7 +325,7 @@ namespace OODataBase_ClassLibrary
             {
                 foreach (var kvp2 in kvp1.Value)
                 {
-                    foreach (var listItem in kvp2.Value)
+                    foreach (var listItem in kvp2.Value.versionsList)
                     {
                         allItems.Add(listItem);
                     }
@@ -320,87 +337,149 @@ namespace OODataBase_ClassLibrary
 
 
 
-        public bool Create(string name, object item)
+        public int Create(string name, object item, int transactionID)
         {
-            bool ret = false;
+            int ret = -1;
 
-            lock (TablesList[name])
+            lock (syncCreate)
             {
-                ret = true;
-
-                if (TablesList[name].Count != 0)
+                lock (syncGetTables)
                 {
-                    ((Item)item).ID = ((Item)TablesList[name].Last().Value.FirstOrDefault()).ID + 1;
-                }
-                else
-                {
-                    ((Item)item).ID = 0;
-                }
-
-                TablesList[name].Add(((Item)item).ID, new List<object>());
-                TablesList[name][((Item)item).ID].Add(item);
-
-                string filename = name + ".xml";
-                const string wrapperTagName = "wrapper";
-                string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
-                string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
-
-                using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-                {
-                    XmlWriter xml = null;
-                    Type t = Type.GetType("OODataBase_ClassLibrary." + name);
-                    var serializer = new XmlSerializer(t);
-                    if (stream.Length == 0)
+                    if (TablesList[name].Count != 0)
                     {
-                        xml = XmlWriter.Create(stream);
-                        xml.WriteStartDocument();
-                        xml.WriteRaw(wrapperStartTag);
+                        ((Item)item).ID = ((Item)TablesList[name].Last().Value.versionsList.FirstOrDefault()).ID + 1;
                     }
                     else
                     {
-                        xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
-                        var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
-                        var buffer = new byte[bufferLength];
-                        stream.Position = stream.Length - bufferLength;
-                        stream.Read(buffer, 0, bufferLength);
-                        if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
-                        {
-                            ret = false;
-                        }
-                        else
-                        {
-                            stream.SetLength(stream.Length - bufferLength);
-                        }
+                        ((Item)item).ID = 0;
                     }
 
-                    serializer.Serialize(xml, item);
-                    xml.WriteRaw(wrapperEndTag);
-                    xml.Close();
+                    ret = ((Item)item).ID;
+
+                    TablesList[name].Add(((Item)item).ID, new VersionsList());
+
+                    TablesList[name][ret].locker.EnterWriteLock();
+                    if (TablesList[name][ret].locker.IsWriteLockHeld)
+                    {
+                        lock (syncLock)
+                            LockedList.Add(Tuple.Create(true, transactionID, TablesList[name][ret].locker));
+
+
+                    }
+                    TablesList[name][((Item)item).ID].Create(item);
+
+                    RefreshXml(name);
+
+                    //string filename = name + ".xml";
+                    //const string wrapperTagName = "wrapper";
+                    //string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
+                    //string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
+
+
+                    //lock (syncXML)
+                    //{
+                    //    using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+                    //    {
+                    //        XmlWriter xml = null;
+                    //        Type t = Type.GetType("OODataBase_ClassLibrary." + name);
+                    //        var serializer = new XmlSerializer(t);
+                    //        if (stream.Length == 0)
+                    //        {
+                    //            xml = XmlWriter.Create(stream);
+                    //            xml.WriteStartDocument();
+                    //            xml.WriteRaw(wrapperStartTag);
+                    //        }
+                    //        else
+                    //        {
+                    //            xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
+                    //            var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
+                    //            var buffer = new byte[bufferLength];
+                    //            stream.Position = stream.Length - bufferLength;
+                    //            stream.Read(buffer, 0, bufferLength);
+                    //            if (!Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
+                    //            {
+                    //                ret = -1;
+                    //            }
+                    //            else
+                    //            {
+                    //                stream.SetLength(stream.Length - bufferLength);
+                    //            }
+                    //        }
+
+                    //        serializer.Serialize(xml, item);
+                    //        xml.WriteRaw(wrapperEndTag);
+                    //        xml.Close();
+                    //    }
+                    //}
                 }
             }
 
             return ret;
         }
 
-        public bool Delete(string name, int id, int version)
+        // TO DELETE ?????? 
+        public void CreateFromRollback(string name, object item)
+        {
+            lock (syncCreate)
+            {
+                TablesList[name][((Item)item).ID].Create(item);
+
+                string filename = name + ".xml";
+                const string wrapperTagName = "wrapper";
+                string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
+                string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
+
+
+                lock (syncXML)
+                {
+                    using (var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+                    {
+                        XmlWriter xml = null;
+                        Type t = Type.GetType("OODataBase_ClassLibrary." + name);
+                        var serializer = new XmlSerializer(t);
+                        if (stream.Length == 0)
+                        {
+                            xml = XmlWriter.Create(stream);
+                            xml.WriteStartDocument();
+                            xml.WriteRaw(wrapperStartTag);
+                        }
+                        else
+                        {
+                            xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true });
+                            var bufferLength = Encoding.UTF8.GetByteCount(wrapperEndTag);
+                            var buffer = new byte[bufferLength];
+                            stream.Position = stream.Length - bufferLength;
+                            stream.Read(buffer, 0, bufferLength);
+                            if (Encoding.UTF8.GetString(buffer).StartsWith(wrapperEndTag))
+                            {
+                                stream.SetLength(stream.Length - bufferLength);
+                            }
+                        }
+
+                        serializer.Serialize(xml, item);
+                        xml.WriteRaw(wrapperEndTag);
+                        xml.Close();
+                    }
+                }
+            }
+        }
+
+        public bool Delete(string name, int id, int version, bool localDelete)
         {
             bool ret = true;
 
-
-            //if (!TablesList.ContainsKey(name))
-            //{
-            //    ret = false;
-            //}
-            //else if (!TablesList[name].ContainsKey(id))
-            //{
-            //    ret = false;
-            //}
-            //else
-            //{
-            if (Monitor.IsEntered(TablesList[name][id]))
+            if (!TablesList.ContainsKey(name))
             {
-                object obj = TablesList[name][id].Find(i => ((Item)i).Version == version);
-                if (!TablesList[name][id].Remove(obj))
+                ret = false;
+            }
+            else if (!TablesList[name].ContainsKey(id))
+            {
+                ret = false;
+            }
+            else
+            {
+                object obj = TablesList[name][id].versionsList.Find(i => ((Item)i).Version == version);
+                if (!TablesList[name][id].Delete(((Item)obj).Version))
                 {
                     ret = false;
                 }
@@ -409,79 +488,30 @@ namespace OODataBase_ClassLibrary
                     RefreshXml(name);
                 }
             }
-            else
-            {
-                ret = false;
-            }
-            //}
 
             return ret;
         }
         
-        public object Update(string name, int id, object obj)
+        public object Update(string name, int id, object obj, bool localUpdate)
         {
             object lastValidVersion = null;
+            
+            ((Item)obj).ID = id;
 
-            if (Monitor.IsEntered(TablesList[name][id]))
-            {
-                lastValidVersion = TablesList[name][id].FirstOrDefault();
-                //((Item)obj).Version = ((Item)lastValidVersion).Version + 1;
+            lastValidVersion = TablesList[name][id].versionsList.FirstOrDefault();
 
-                TablesList[name][id].Insert(0, obj);   
-                RefreshXml(name);
-            }
+            TablesList[name][id].Create(obj);
+            RefreshXml(name);
 
             return lastValidVersion;
         }
-
-        //public bool UpdateMultiple(List<string> names, List<int> ids, List<object> objects)
-        //{
-        //    bool ret = true;
-
-        //    if (names.Count == 0)
-        //        ret = false;
-
-        //    for (int i = 0; i < names.Count; i++)
-        //    {
-        //        if (!TablesList.ContainsKey(names[i]))
-        //        {
-        //            ret = false;
-        //            break;
-        //        }
-        //        else if (!TablesList[names[i]].ContainsKey(ids[i]))
-        //        {
-        //            ret = false;
-        //            break;
-        //        }
-        //    }
-
-        //    if (ret)
-        //    {
-        //        for (int i = 0; i < names.Count; i++)
-        //        {
-        //            lock(TablesList[names[i]][ids[i]])
-        //            {
-        //                ((Item)objects[i]).ID = ids[i];
-        //                ((Item)objects[i]).Version = Version;
-        //                TablesList[names[i]][ids[i]].Insert(0, objects[i]);
-        //            }
-        //        }
-        //        Version++;
-        //        WriteVersion(Version);
-        //    }
-
-        //    foreach (string name in names)
-        //    {
-        //        RefreshXml(name);
-        //    }
-
-        //    return ret;
-        //}
+        
         
 
         void RefreshXml(string name)
         {
             // rewriting .xml file with updated data
+            
 
             if (TablesList[name].Count != 0)
             {
@@ -490,32 +520,35 @@ namespace OODataBase_ClassLibrary
                 string wrapperStartTag = string.Format("<{0}>", wrapperTagName);
                 string wrapperEndTag = string.Format("</{0}>", wrapperTagName);
 
-                using (var stream = File.Open(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+                lock(syncCreate)
                 {
-                    XmlWriter xml = null;
-                    Type t = Type.GetType("OODataBase_ClassLibrary." + name);
-                    var serializer = new XmlSerializer(t);
-                    xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true, ConformanceLevel = ConformanceLevel.Fragment, CloseOutput = false });
-                    
-                    xml.WriteRaw(wrapperStartTag);
-
-                    foreach (var item in TablesList[name])
+                    using (var stream = File.Open(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
                     {
-                        foreach (var value in item.Value)
-                        {
-                            serializer.Serialize(xml, value);
-                            xml.Flush();
-                        }
-                    }
+                        XmlWriter xml = null;
+                        Type t = Type.GetType("OODataBase_ClassLibrary." + name);
+                        var serializer = new XmlSerializer(t);
+                        xml = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true, ConformanceLevel = ConformanceLevel.Fragment, CloseOutput = false });
 
-                    xml.WriteRaw(wrapperEndTag);
-                    xml.Close();
+                        xml.WriteRaw(wrapperStartTag);
+
+                        foreach (var item in TablesList[name])
+                        {
+                            foreach (var value in item.Value.versionsList)
+                            {
+                                serializer.Serialize(xml, value);
+                                xml.Flush();
+                            }
+                        }
+
+                        xml.WriteRaw(wrapperEndTag);
+                        xml.Close();
+                    }
                 }
             }
         }
 
 
-        public bool LockItem(string name, int id, int transactionID)
+        public bool LockItem(string name, int id, int transactionID, bool isWrite)
         {
             bool ret = true;
 
@@ -531,17 +564,37 @@ namespace OODataBase_ClassLibrary
                 }
                 else
                 {
-                    bool partOfTuple = false;
-
                     try
                     {
-                        if (Monitor.TryEnter(TablesList[name][id], 5))
+                        if (isWrite)
                         {
-                            LockedList.Add(Tuple.Create(partOfTuple, transactionID, TablesList[name][id]));
+                            if (!TablesList[name][id].locker.IsWriteLockHeld)
+                            {
+                                if (TablesList[name][id].locker.TryEnterWriteLock(5))
+                                {
+                                    lock(syncLock)
+                                        LockedList.Add(Tuple.Create(isWrite, transactionID, TablesList[name][id].locker));
+                                }
+                                else
+                                {
+                                    ret = false;
+                                }
+                            }
                         }
                         else
                         {
-                            ret = false;
+                            if (!TablesList[name][id].locker.IsReadLockHeld)
+                            {
+                                if (TablesList[name][id].locker.TryEnterReadLock(5))
+                                {
+                                    lock (syncLock)
+                                        LockedList.Add(Tuple.Create(isWrite, transactionID, TablesList[name][id].locker));
+                                }
+                                else
+                                {
+                                    ret = false;
+                                }
+                            }
                         }
                     }
                     catch
@@ -558,11 +611,21 @@ namespace OODataBase_ClassLibrary
 
         public void UnlockItems(int transactionID, int transactionVersion)
         {
-            foreach (var lockedItem in LockedList)
+            lock (syncLock)
             {
-                if(lockedItem.Item2 == transactionID)
+                foreach (var lockedItem in LockedList)
                 {
-                    Monitor.Exit(lockedItem.Item3);
+                    if (lockedItem.Item2 == transactionID)
+                    {
+                        if (lockedItem.Item1)
+                        {
+                            lockedItem.Item3.ExitWriteLock();
+                        }
+                        else
+                        {
+                            lockedItem.Item3.ExitReadLock();
+                        }
+                    }
                 }
             }
 
@@ -578,4 +641,68 @@ namespace OODataBase_ClassLibrary
             return Interlocked.Increment(ref TransactionID);
         }
     }
+
+
+    public class VersionsList
+    {
+        public ReaderWriterLockSlim locker { get; private set; }
+
+        public List<object> versionsList { get; private set; }
+
+        public VersionsList()
+        {
+            locker = new ReaderWriterLockSlim();
+            versionsList = new List<object>();
+        }
+
+        public bool Create(object item, bool fillTable = false)
+        {
+            bool ret = false;
+
+            if(locker.IsWriteLockHeld || fillTable)
+            {
+                versionsList.Insert(0, item);
+                ret = true;
+            }
+
+            return ret;
+        }
+
+
+        public object Read(int version)
+        {
+            object ret = null;
+
+            if (locker.IsReadLockHeld)
+            {
+                ret = versionsList.Find(item => ((Item)item).Version <= version);
+            }
+
+            return ret;
+        }
+
+        
+        public bool Delete(int version)
+        {
+            bool ret = false;
+
+            if (locker.IsWriteLockHeld)
+            {
+                object foundItem = versionsList.Find(item => ((Item)item).Version == version);
+
+                if (versionsList.Remove(foundItem))
+                {
+                    ret = true;
+                }
+            }
+
+            return ret;
+        }
+
+        public void OrderByVersion()
+        {
+            versionsList = versionsList.OrderByDescending(i => ((Item)i).Version).ToList();
+        }
+    }
+
 }

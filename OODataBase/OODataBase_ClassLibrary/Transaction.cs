@@ -16,6 +16,16 @@ namespace OODataBase_ClassLibrary
 
         private List<Tuple<string, object>> Operations;
         private List<Tuple<string, object>> InverseOperations;
+
+        
+        List<Tuple<string, int>> old_new_IDs = new List<Tuple<string, int>>();
+        
+        // splitted items: nameID, List of its versions in current Transaction
+        private Dictionary<string, List<object>> versionControl;
+
+        // items added in current Transaction
+        // not in the DataBase - CAN'T LOCK THEM !
+        private List<string> nameID_newlyAddedItems;
         
         private int transactionID;
         private int Version;
@@ -34,6 +44,9 @@ namespace OODataBase_ClassLibrary
 
             Operations = new List<Tuple<string, object>>();
             InverseOperations = new List<Tuple<string, object>>();
+
+            versionControl = new Dictionary<string, List<object>>();
+            nameID_newlyAddedItems = new List<string>();
         }
 
         
@@ -67,6 +80,8 @@ namespace OODataBase_ClassLibrary
                     ((Item)item).Version = Version - 1;
                     TablesList_T[name].Add(((Item)item).ID, new List<object>());
                     TablesList_T[name][((Item)item).ID].Add(item);
+
+                    nameID_newlyAddedItems.Add(name + ((Item)item).ID.ToString());
                     Operations.Add(Tuple.Create("create", item));
                 }
             }
@@ -122,24 +137,26 @@ namespace OODataBase_ClassLibrary
             {
                 string name = item.GetType().ToString().Split('.').Last();
                 int id = ((Item)item).ID;
-                string opName;
+                // string opName;
+                bool lockOK = true;
 
-                if (db.LockItem(name, id, transactionID))
+                // is that item already in the DataBase
+                if(!nameID_newlyAddedItems.Contains(name + id.ToString()))
                 {
-                    foreach (var op in Operations)
+                    lockOK = db.LockItem(name, id, transactionID, true);
+                }
+
+                if (lockOK)
+                {
+                    if (!versionControl.ContainsKey(name + id.ToString()))
                     {
-                        opName = op.Item2.GetType().ToString().Split('.').Last() + ((Item)op.Item2).ID.ToString();
-
-                        // is this item ("Laptop1") already updated by this transaction
-
-                        if (op.Item1 == "update" && opName == name + id.ToString())
-                        {
-                            Version++;
-                            break;
-                        }
+                        versionControl.Add(name + id.ToString(), new List<object>());
                     }
-                    ((Item)item).Version = Version;
-                    
+
+                    ((Item)item).Version = Version + versionControl[name + id.ToString()].Count;
+
+                    versionControl[name + id.ToString()].Add(item);
+                        
                     (TablesList_T[name][id]).Insert(0, item);
                     Operations.Add(Tuple.Create("update", item));
                 }
@@ -178,7 +195,15 @@ namespace OODataBase_ClassLibrary
                 }
                 else
                 {
-                    if (db.LockItem(name, id, transactionID))
+                    bool lockOK = true;
+
+                    // is that item already in the DataBase
+                    if (!nameID_newlyAddedItems.Contains(name + id.ToString()))
+                    {
+                        lockOK = db.LockItem(name, id, transactionID, true);
+                    }
+
+                    if (lockOK)
                     {
                         object obj = TablesList_T[name][id].Find(i => ((Item)i).Version == version);
                         if (!TablesList_T[name][id].Remove(obj))
@@ -218,6 +243,10 @@ namespace OODataBase_ClassLibrary
                 List<object> itemsByType = new List<object>();
                 List<object> helpList = new List<object>();
 
+                if(choosenType == "")
+                {
+                    choosenType = "Item";
+                }
                 FindLeafRecursive(itemsByType, choosenType);
 
                 if (property == "")
@@ -320,10 +349,11 @@ namespace OODataBase_ClassLibrary
                 string name;
                 int id;
                 int version;
+                
 
                 foreach (var operation in Operations)
                 {
-                    // poziv metoda iz db-a
+                    // calling methods from DBManager
 
                     name = operation.Item2.GetType().ToString().Split('.').Last();
                     id = ((Item)operation.Item2).ID;
@@ -332,7 +362,8 @@ namespace OODataBase_ClassLibrary
                     switch (operation.Item1)
                     {
                         case "create":
-                            if (!db.Create(name, operation.Item2))
+                            int createdItemID = db.Create(name, operation.Item2, transactionID);
+                            if (createdItemID == -1)
                             {
                                 Rollback();
                                 ret = false;
@@ -340,12 +371,25 @@ namespace OODataBase_ClassLibrary
                             }
                             else
                             {
+                                old_new_IDs.Add(Tuple.Create(name + id.ToString(), createdItemID));
+
                                 InverseOperations.Insert(0, Tuple.Create("delete", operation.Item2));
                             }
                             break;
 
                         case "delete":
-                            if (!db.Delete(name, id, version))
+                            bool localDelete = false;
+                            foreach (var old_new_item in old_new_IDs)
+                            {
+                                if(old_new_item.Item1 == name + id.ToString())
+                                {
+                                    id = old_new_item.Item2;
+                                    localDelete = true;
+                                    break;
+                                }
+                            }
+
+                            if (!db.Delete(name, id, version, localDelete))
                             {
                                 Rollback();
                                 ret = false;
@@ -358,7 +402,18 @@ namespace OODataBase_ClassLibrary
                             break;
 
                         case "update":
-                            object lastValidItem = db.Update(name, id, operation.Item2);
+                            bool localUpdate = false;
+                            foreach (var old_new_item in old_new_IDs)
+                            {
+                                if (old_new_item.Item1 == name + id.ToString())
+                                {
+                                    id = old_new_item.Item2;
+                                    localUpdate = true;
+                                    break;
+                                }
+                            }
+
+                            object lastValidItem = db.Update(name, id, operation.Item2, localUpdate);
                             if (lastValidItem == null)
                             {
                                 Rollback();
@@ -367,7 +422,8 @@ namespace OODataBase_ClassLibrary
                             }
                             else
                             {
-                                InverseOperations.Insert(0, Tuple.Create("update", lastValidItem));
+
+                                InverseOperations.Insert(0, Tuple.Create("delete", operation.Item2));
                             }
                             break;
 
@@ -375,6 +431,18 @@ namespace OODataBase_ClassLibrary
                             break;
                     }
                 }
+                
+                int maxVersionOfTransaction = 0;
+
+                foreach (var kvp in versionControl)
+                {
+                    if (kvp.Value.Count > maxVersionOfTransaction)
+                    {
+                        maxVersionOfTransaction = kvp.Value.Count;
+                    }
+                }
+
+                Version += maxVersionOfTransaction;
 
                 db.UnlockItems(transactionID, Version);
             }
@@ -382,8 +450,8 @@ namespace OODataBase_ClassLibrary
             {
                 Console.WriteLine("Transaction_" + transactionID + " is NOT COMMITING changes ...");
             }
-            // all operations from Transaction were successfull
 
+            // all operations from Transaction were successfull
             Reset();
 
             return ret;
@@ -409,15 +477,33 @@ namespace OODataBase_ClassLibrary
                 switch (operation.Item1)
                 {
                     case "create":
-                        db.Create(name, operation.Item2);
+                        foreach (var old_new_item in old_new_IDs)
+                        {
+                            if (old_new_item.Item1 == name + id.ToString())
+                            {
+                                id = old_new_item.Item2;
+                                break;
+                            }
+                        }
+                        db.CreateFromRollback(name, operation.Item2);
                         break;
 
                     case "delete":
-                        db.Delete(name, id, version);
+                        bool localUpdate = false;
+                        foreach (var old_new_item in old_new_IDs)
+                        {
+                            if (old_new_item.Item1 == name + id.ToString())
+                            {
+                                id = old_new_item.Item2;
+                                localUpdate = true;
+                                break;
+                            }
+                        }
+                        db.Delete(name, id, version, localUpdate);
                         break;
 
                     case "update":
-                        db.Update(name, id, operation.Item2);
+                        db.Update(name, id, operation.Item2, true);
                         break;
 
                     default:
@@ -425,7 +511,9 @@ namespace OODataBase_ClassLibrary
                 }
             }
 
+            // reset version, because COMMIT failed
             Version = db.VersionProperty;
+
             db.UnlockItems(transactionID, Version);
             Reset();
 
@@ -438,7 +526,10 @@ namespace OODataBase_ClassLibrary
         {
             Operations = new List<Tuple<string, object>>();
             InverseOperations = new List<Tuple<string, object>>();
-            
+            versionControl = new Dictionary<string, List<object>>();
+            nameID_newlyAddedItems = new List<string>();
+            old_new_IDs = new List<Tuple<string, int>>();
+
             transactionValid = true;
             transactionBegun = false;
         }
