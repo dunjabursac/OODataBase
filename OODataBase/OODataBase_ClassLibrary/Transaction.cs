@@ -17,7 +17,7 @@ namespace OODataBase_ClassLibrary
         private List<Tuple<string, object>> Operations;
         private List<Tuple<string, object>> InverseOperations;
 
-        
+        // used for mapping local to global DB identifiers
         List<Tuple<string, int>> old_new_IDs = new List<Tuple<string, int>>();
         
         // splitted items: nameID, List of its versions in current Transaction
@@ -378,18 +378,16 @@ namespace OODataBase_ClassLibrary
                             break;
 
                         case "delete":
-                            bool localDelete = false;
                             foreach (var old_new_item in old_new_IDs)
                             {
                                 if(old_new_item.Item1 == name + id.ToString())
                                 {
                                     id = old_new_item.Item2;
-                                    localDelete = true;
                                     break;
                                 }
                             }
 
-                            if (!db.Delete(name, id, version, localDelete))
+                            if (!db.Delete(name, id, version))
                             {
                                 Rollback();
                                 ret = false;
@@ -402,18 +400,16 @@ namespace OODataBase_ClassLibrary
                             break;
 
                         case "update":
-                            bool localUpdate = false;
                             foreach (var old_new_item in old_new_IDs)
                             {
                                 if (old_new_item.Item1 == name + id.ToString())
                                 {
                                     id = old_new_item.Item2;
-                                    localUpdate = true;
                                     break;
                                 }
                             }
 
-                            object lastValidItem = db.Update(name, id, operation.Item2, localUpdate);
+                            object lastValidItem = db.Update(name, id, operation.Item2);
                             if (lastValidItem == null)
                             {
                                 Rollback();
@@ -489,21 +485,19 @@ namespace OODataBase_ClassLibrary
                         break;
 
                     case "delete":
-                        bool localUpdate = false;
                         foreach (var old_new_item in old_new_IDs)
                         {
                             if (old_new_item.Item1 == name + id.ToString())
                             {
                                 id = old_new_item.Item2;
-                                localUpdate = true;
                                 break;
                             }
                         }
-                        db.Delete(name, id, version, localUpdate);
+                        db.Delete(name, id, version);
                         break;
 
                     case "update":
-                        db.Update(name, id, operation.Item2, true);
+                        db.Update(name, id, operation.Item2);
                         break;
 
                     default:

@@ -422,7 +422,7 @@ namespace OODataBase_ClassLibrary
             }
         }
 
-        public bool Delete(string name, int id, int version, bool localDelete)
+        public bool Delete(string name, int id, int version)
         {
             bool ret = true;
 
@@ -437,20 +437,28 @@ namespace OODataBase_ClassLibrary
             else
             {
                 object obj = TablesList[name][id].versionsList.Find(i => ((Item)i).Version == version);
-                if (!TablesList[name][id].Delete(((Item)obj).Version))
+
+                if(obj != null)
                 {
-                    ret = false;
+                    if (!TablesList[name][id].Delete(((Item)obj).Version))
+                    {
+                        ret = false;
+                    }
+                    else
+                    {
+                        RefreshXml(name);
+                    }
                 }
                 else
                 {
-                    RefreshXml(name);
+                    ret = false;
                 }
             }
 
             return ret;
         }
         
-        public object Update(string name, int id, object obj, bool localUpdate)
+        public object Update(string name, int id, object obj)
         {
             object lastValidVersion = null;
             
