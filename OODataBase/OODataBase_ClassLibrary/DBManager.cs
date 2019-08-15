@@ -154,7 +154,7 @@ namespace OODataBase_ClassLibrary
             }
         }
 
-        public bool Delete(string name, int id, int version, bool localDelete)
+        public bool Delete(string name, int id, int version)
         {
             bool ret = true;
 
@@ -188,7 +188,7 @@ namespace OODataBase_ClassLibrary
             return ret;
         }
         
-        public object Update(string name, int id, object obj, bool localUpdate)
+        public object Update(string name, int id, object obj)
         {
             object lastValidVersion = null;
             

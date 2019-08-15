@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using OODataBase_ClassLibrary;
+using System.ComponentModel;
 
 namespace TestApp
 {
@@ -54,12 +55,23 @@ namespace TestApp
 
         public static void StartTest1()
         {
-            List<object> selectList;
             Transaction trans1 = new Transaction();
 
-            
+            List<object> selectList;
+            string selectItem;
+            string selectProperty;
+            string selectValue;
+            int selectVersion;
+
             trans1.Begin();
-            selectList = trans1.Select("Cooker", "", "", Int32.MaxValue);
+
+            selectItem = "Cooker";
+            selectProperty = "";
+            selectValue = "";
+            selectVersion = 0;
+
+            selectList = trans1.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
 
             if(trans1.Create("Cooker", new Cooker() { Price = 64199, Brand = "Gorenje", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 123, PanelType = "flat" }))
                 Console.WriteLine("Created");
@@ -77,7 +89,13 @@ namespace TestApp
                 Console.WriteLine("Created");
 
 
-            trans1.Select("", "", "", Int32.MaxValue);
+            selectItem = "";
+            selectProperty = "";
+            selectValue = "";
+            selectVersion = Int32.MaxValue;
+
+            selectList = trans1.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
 
 
             if (trans1.Update("Cooker", new Cooker() { Price = 62000, Brand = "Gorenje", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 123, PanelType = "flat", ID = 0 }))
@@ -98,19 +116,38 @@ namespace TestApp
                 Console.WriteLine("Updated");
 
 
-            trans1.Select("", "", "", Int32.MaxValue);
+            selectItem = "Cooker";
+            selectProperty = "";
+            selectValue = "";
+            selectVersion = 2;
+
+            selectList = trans1.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
+
 
             trans1.Commit();
         }
 
         public static void StartTest2()
         {
-            List<object> selectList;
             Transaction trans1 = new Transaction();
+
+            List<object> selectList;
+            string selectItem;
+            string selectProperty;
+            string selectValue;
+            int selectVersion;
 
 
             trans1.Begin();
-            selectList = trans1.Select("AirConditioner", "Price", "56000", Int32.MaxValue);
+
+            selectItem = "AirConditioner";
+            selectProperty = "Price";
+            selectValue = "56000";
+            selectVersion = Int32.MaxValue;
+
+            selectList = trans1.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
 
             if (trans1.Create("AirConditioner", new AirConditioner() { Price = 56000, Brand = "LG", EnergyClass = "A++", CoolingCapacity = 4, NoiseLevel = 41, MinCoolingTemperature = 16 })) 
                 Console.WriteLine("Created");
@@ -126,7 +163,13 @@ namespace TestApp
                 Console.WriteLine("Created");
 
 
-            trans1.Select("", "", "", Int32.MaxValue);
+            selectItem = "";
+            selectProperty = "";
+            selectValue = "";
+            selectVersion = Int32.MaxValue;
+
+            selectList = trans1.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
 
 
             if (trans1.Update("AirConditioner", new AirConditioner() { Price = 49000, Brand = "LG", EnergyClass = "A++", CoolingCapacity = 4, NoiseLevel = 41, MinCoolingTemperature = 16, ID = 0 }))
@@ -138,9 +181,15 @@ namespace TestApp
                 Console.WriteLine("Updated");
             if (trans1.Update("Desktop", new Desktop() { Price = 42990, Brand = "A-comp", PowerSupply = 500, Processor = "AMD Ryzen 3", RAM = 8, ROM = 1, Type = "Gaming", ID = 1 }))
                 Console.WriteLine("Updated");
-            
 
-            trans1.Select("", "", "", Int32.MaxValue);
+
+            selectItem = "";
+            selectProperty = "";
+            selectValue = "";
+            selectVersion = Int32.MaxValue;
+
+            selectList = trans1.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
 
 
             trans1.Commit();
@@ -150,11 +199,27 @@ namespace TestApp
         {
             Transaction trans2 = new Transaction();
 
+            List<object> selectList;
+            string selectItem;
+            string selectProperty;
+            string selectValue;
+            int selectVersion;
+
+
             trans2.Begin();
             trans2.Update("Cooker", new Cooker() { Price = 56890, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 123, PanelType = "flat", ID = 2 });
             trans2.Update("Cooker", new Cooker() { Price = 58122, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 9999, PanelType = "flat", ID = 2 });
             trans2.Update("Cooker", new Cooker() { Price = 51260, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 7777, PanelType = "flat", ID = 1 });
             trans2.Update("Cooker", new Cooker() { Price = 50970, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 7777, PanelType = "flat", ID = 1 });
+
+            selectItem = "Cooker";
+            selectProperty = "";
+            selectValue = "";
+            selectVersion = 1;
+
+            selectList = trans2.Select(selectItem, selectProperty, selectValue, selectVersion);
+            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
+
             trans2.Commit();
         }
 
@@ -304,6 +369,38 @@ namespace TestApp
                 Console.WriteLine("Deleted");
 
             trans1.Commit();
+        }
+
+
+
+        public static void ShowSelectedItems(List<object> selectedItems, string sItem, string sProperty, string sValue, int sVersion)
+        {
+            string showSelected = "\n***************** SELECTED ITEMS *****************\n\n";
+
+            if (sVersion == Int32.MaxValue)
+            {
+                showSelected += "***** " + sItem + " | " + sProperty + " | " + sValue + " | " + "MaxValue" + " *****" + "\n\n";
+            }
+            else
+            {
+                showSelected += "***** " + sItem + " | " + sProperty + " | " + sValue + " | " + sVersion + " *****" + "\n\n";
+            }
+
+
+            foreach (var item in selectedItems)
+            {
+                showSelected += "--- ";
+                showSelected += item.GetType().ToString().Split('.').Last() + " ---\n";
+
+                foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(item))
+                {
+                    showSelected += descriptor.Name + " : " + descriptor.GetValue(item) + "\n";
+                }
+
+                showSelected += "\n\n";
+            }
+
+            Console.WriteLine(showSelected);
         }
     }
 }
