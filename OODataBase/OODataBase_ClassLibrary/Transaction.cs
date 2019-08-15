@@ -17,9 +17,10 @@ namespace OODataBase_ClassLibrary
         private List<Tuple<string, object>> Operations;
         private List<Tuple<string, object>> InverseOperations;
 
-        
-        List<Tuple<string, int>> old_new_IDs = new List<Tuple<string, int>>();
-        
+
+        private List<Tuple<string, int>> old_new_IDs = new List<Tuple<string, int>>();
+        private List<string> changeTheseXMLs = new List<string>();
+
         // splitted items: nameID, List of its versions in current Transaction
         private Dictionary<string, List<object>> versionControl;
 
@@ -50,7 +51,7 @@ namespace OODataBase_ClassLibrary
         }
 
         
-        public bool Create(object item)
+        public bool Create(string name, object item)
         {
             Console.WriteLine("Transaction_" + this.transactionID + " is creating item ...");
 
@@ -58,8 +59,6 @@ namespace OODataBase_ClassLibrary
 
             if (transactionValid && transactionBegun)
             {
-                string name = item.GetType().ToString().Split('.').Last();
-
                 if (!TablesList_T.ContainsKey(name))
                 {
                     ret = false;
@@ -75,10 +74,9 @@ namespace OODataBase_ClassLibrary
                     {
                         ((Item)item).ID = 0;
                     }
-
-
+                    
                     ((Item)item).Version = Version - 1;
-                    TablesList_T[name].Add(((Item)item).ID, new List<object>());
+                    TablesList_T[name].Add(((Item)item).ID, new List<object>());    // creating list of versions for created item
                     TablesList_T[name][((Item)item).ID].Add(item);
 
                     nameID_newlyAddedItems.Add(name + ((Item)item).ID.ToString());
@@ -123,11 +121,10 @@ namespace OODataBase_ClassLibrary
                 transactionValid = false;
             }
                 
-
             return ret;
         }
 
-        public bool Update(object item)
+        public bool Update(string name, object item)
         {
             Console.WriteLine("Transaction_" + transactionID + " is updating item ...");
 
@@ -135,7 +132,6 @@ namespace OODataBase_ClassLibrary
 
             if(transactionValid && transactionBegun)
             {
-                string name = item.GetType().ToString().Split('.').Last();
                 int id = ((Item)item).ID;
                 // string opName;
                 bool lockOK = true;
@@ -154,9 +150,7 @@ namespace OODataBase_ClassLibrary
                     }
 
                     ((Item)item).Version = Version + versionControl[name + id.ToString()].Count;
-
                     versionControl[name + id.ToString()].Add(item);
-                        
                     (TablesList_T[name][id]).Insert(0, item);
                     Operations.Add(Tuple.Create("update", item));
                 }
@@ -260,7 +254,6 @@ namespace OODataBase_ClassLibrary
                         foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(item))
                         {
                             // selecti items by TYPE and PROPERTY
-
                             if (descriptor.Name == property)
                             {
                                 if (descriptor.GetValue(item).ToString() == value)
@@ -278,7 +271,6 @@ namespace OODataBase_ClassLibrary
                 foreach (var currentItem in helpList)
                 {
                     // select newest or wanted VERSION
-
                     if (!(leafID_choosenVersion.ContainsKey(currentItem.GetType().ToString() + ((Item)currentItem).ID.ToString())) && ((Item)currentItem).Version <= version)
                     {
                         leafID_choosenVersion.Add(currentItem.GetType().ToString() + ((Item)currentItem).ID.ToString(), currentItem);
@@ -338,7 +330,7 @@ namespace OODataBase_ClassLibrary
         public bool Commit()
         {
             // at the end of Transaction
-            // (every operation went well, write in .xml files)
+            // (every operation went well - write in .xml files, or if not - Rollback)
 
             bool ret = true;
 
@@ -371,8 +363,11 @@ namespace OODataBase_ClassLibrary
                             }
                             else
                             {
+                                if(!changeTheseXMLs.Contains(name))
+                                {
+                                    changeTheseXMLs.Add(name);
+                                }
                                 old_new_IDs.Add(Tuple.Create(name + id.ToString(), createdItemID));
-
                                 InverseOperations.Insert(0, Tuple.Create("delete", operation.Item2));
                             }
                             break;
@@ -397,6 +392,10 @@ namespace OODataBase_ClassLibrary
                             }
                             else
                             {
+                                if (!changeTheseXMLs.Contains(name))
+                                {
+                                    changeTheseXMLs.Add(name);
+                                }
                                 InverseOperations.Insert(0, Tuple.Create("create", operation.Item2));
                             }
                             break;
@@ -422,7 +421,10 @@ namespace OODataBase_ClassLibrary
                             }
                             else
                             {
-
+                                if (!changeTheseXMLs.Contains(name))
+                                {
+                                    changeTheseXMLs.Add(name);
+                                }
                                 InverseOperations.Insert(0, Tuple.Create("delete", operation.Item2));
                             }
                             break;
@@ -444,7 +446,7 @@ namespace OODataBase_ClassLibrary
 
                 Version += maxVersionOfTransaction;
 
-                db.UnlockItems(transactionID, Version);
+                db.UnlockItems(transactionID, Version, changeTheseXMLs);
             }
             else
             {
@@ -514,7 +516,7 @@ namespace OODataBase_ClassLibrary
             // reset version, because COMMIT failed
             Version = db.VersionProperty;
 
-            db.UnlockItems(transactionID, Version);
+            db.UnlockItems(transactionID, Version, new List<string>());
             Reset();
 
             return true;
@@ -529,6 +531,7 @@ namespace OODataBase_ClassLibrary
             versionControl = new Dictionary<string, List<object>>();
             nameID_newlyAddedItems = new List<string>();
             old_new_IDs = new List<Tuple<string, int>>();
+            changeTheseXMLs = new List<string>();
 
             transactionValid = true;
             transactionBegun = false;
