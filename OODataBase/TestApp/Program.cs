@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OODataBase_ClassLibrary;
 using System.ComponentModel;
+using System.IO;
 
 namespace TestApp
 {
@@ -12,41 +13,49 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            List<Thread> threads = new List<Thread>();
+            Console.WriteLine("1. Multiple users test");
+            Console.WriteLine("2. Speed test");
+            Console.WriteLine("0. Exit");
 
-            for (int i = 0; i < 20; i++)
+            int answer = Convert.ToInt32(Console.ReadLine());
+            
+            if(answer == 1)
             {
-                threads.Add(new Thread(StartTest1));
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                threads.Add(new Thread(StartTest2));
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                threads.Add(new Thread(StartTest3));
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                threads.Add(new Thread(StartTest4));
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                threads.Add(new Thread(StartTest5));
-            }
+                List<Thread> threads = new List<Thread>();
 
-
-            foreach (var t in threads)
-            {
-                t.Start();
-            }
-
-            foreach (var t in threads)
-            {
-                t.Join();
-            }
+                for (int i = 0; i < 25; i++)
+                {
+                    threads.Add(new Thread(StartTest1));
+                }
+                for (int i = 0; i < 25; i++)
+                {
+                    threads.Add(new Thread(StartTest2));
+                }
+                for (int i = 0; i < 25; i++)
+                {
+                    threads.Add(new Thread(StartTest3));
+                }
+                for (int i = 0; i < 25; i++)
+                {
+                    threads.Add(new Thread(StartTest4));
+                }
 
 
+                foreach (var t in threads)
+                {
+                    t.Start();
+                }
+
+                foreach (var t in threads)
+                {
+                    t.Join();
+                }
+            }
+            else if(answer == 2)
+            {
+                TestOperationsSpeed();
+            }
+            
             Console.ReadLine();
         }
 
@@ -197,34 +206,6 @@ namespace TestApp
 
         public static void StartTest3()
         {
-            Transaction trans2 = new Transaction();
-
-            List<object> selectList;
-            string selectItem;
-            string selectProperty;
-            string selectValue;
-            int selectVersion;
-
-
-            trans2.Begin();
-            trans2.Update("Cooker", new Cooker() { Price = 56890, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 123, PanelType = "flat", ID = 2 });
-            trans2.Update("Cooker", new Cooker() { Price = 58122, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 9999, PanelType = "flat", ID = 2 });
-            trans2.Update("Cooker", new Cooker() { Price = 51260, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 7777, PanelType = "flat", ID = 1 });
-            trans2.Update("Cooker", new Cooker() { Price = 50970, Brand = "Beko", EnergyClass = "A+", MaxTemperature = 220, NoiseLevel = 7777, PanelType = "flat", ID = 1 });
-
-            selectItem = "Cooker";
-            selectProperty = "";
-            selectValue = "";
-            selectVersion = 1;
-
-            selectList = trans2.Select(selectItem, selectProperty, selectValue, selectVersion);
-            ShowSelectedItems(selectList, selectItem, selectProperty, selectValue, selectVersion);
-
-            trans2.Commit();
-        }
-
-        public static void StartTest4()
-        {
            Transaction trans1 = new Transaction();
             
             trans1.Begin();
@@ -251,7 +232,7 @@ namespace TestApp
             trans1.Commit();
         }
         
-        public static void StartTest5()
+        public static void StartTest4()
         {
             // Thread.Sleep(5000);
 
@@ -372,6 +353,153 @@ namespace TestApp
         }
 
 
+        public static void TestOperationsSpeed()
+        {
+            string className = "Oven";
+
+            // empty Oven.xml for more precise test results
+            StreamWriter streamWriter = new StreamWriter(className + ".xml");
+            streamWriter.Close();
+            File.Delete("Version.txt");
+            
+            TestCreateOperationSpeed();
+            TestReadOperationSpeed();
+            TestUpdateOperationSpeed();
+            TestSelectOperationSpeed();
+            TestDeleteOperationSpeed();
+        }
+
+        public static void TestCreateOperationSpeed()
+        {
+            Transaction transCRUD = new Transaction();
+            var myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+            long sum = 0;
+            long currentElapsedTime;
+
+            for(int i=0; i<10; i++)
+            {
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transCRUD.Begin();
+                transCRUD.Create("Oven", new Oven() { Brand = "Samsung", Price = 176000, EnergyClass = "A++", MaxTemperature = 280, NoiseLevel = 123, Volume = 34 });
+                transCRUD.Commit();
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Creating an item need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+            }
+
+            Console.WriteLine("\nAverage time for creating an item is: " + (sum/10).ToString() + " milliseconds.\n");
+        }
+
+        public static void TestReadOperationSpeed()
+        {
+            Transaction transCRUD = new Transaction();
+            var myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+            long sum = 0;
+            long currentElapsedTime;
+
+            for (int i = 0; i < 10; i++)
+            {
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transCRUD.Begin();
+                transCRUD.Read("Oven",  0, 0);
+                transCRUD.Commit();
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Reading an item need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+            }
+
+            Console.WriteLine("\nAverage time for reading an item is: " + (sum / 10).ToString() + " milliseconds.\n");
+        }
+
+        public static void TestUpdateOperationSpeed()
+        {
+            Transaction transCRUD = new Transaction();
+            var myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+            long sum = 0;
+            long currentElapsedTime;
+
+            for (int i = 0; i < 10; i++)
+            {
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transCRUD.Begin();
+                transCRUD.Update("Oven", new Oven() { ID = 0, Brand = "Samsung", Price = 176000, EnergyClass = "A++", MaxTemperature = 280, NoiseLevel = 123, Volume = 34 });
+                transCRUD.Commit();
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Updating an item need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+            }
+
+            Console.WriteLine("\nAverage time for updating an item is: " + (sum / 10).ToString() + " milliseconds.\n");
+        }
+
+        public static void TestDeleteOperationSpeed()
+        {
+            Transaction transCRUD = new Transaction();
+            var myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+            long sum = 0;
+            long currentElapsedTime;
+
+            for (int i = 0; i < 10; i++)
+            {
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transCRUD.Begin();
+                transCRUD.Delete("Oven", i, 0);
+                transCRUD.Commit();
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Deleting an item need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+            }
+
+            Console.WriteLine("\nAverage time for deleting an item is: " + (sum / 10).ToString() + " milliseconds.\n");
+        }
+
+        public static void TestSelectOperationSpeed()
+        {
+            Transaction transSelect = new Transaction();
+            var myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+            long sum = 0;
+            long currentElapsedTime;
+
+            for(int i=0; i<2; i++)
+            {
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transSelect.Begin();
+
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transSelect.Select("", "", "", Int32.MaxValue);
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Selecting items need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transSelect.Select("Oven", "", "", Int32.MaxValue);
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Selecting items need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transSelect.Select("", "Price", "123", Int32.MaxValue);
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Selecting items need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transSelect.Select("", "Price", "176000", 0);
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Selecting items need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+
+                myStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                transSelect.Select("Oven", "Price", "176000", 0);
+                currentElapsedTime = myStopwatch.ElapsedMilliseconds;
+                Console.WriteLine("Selecting items need " + currentElapsedTime.ToString() + " milliseconds to execute.");
+                sum += currentElapsedTime;
+
+                transSelect.Commit();
+            }
+
+            Console.WriteLine("\nAverage time for selecting items is: " + (sum / 10).ToString() + " milliseconds.\n");
+        }
 
         public static void ShowSelectedItems(List<object> selectedItems, string sItem, string sProperty, string sValue, int sVersion)
         {
