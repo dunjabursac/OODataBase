@@ -331,8 +331,7 @@ namespace OODataBase_ClassLibrary
 
             return ret;
         }
-
-
+        
         public object Read(int version)
         {
             object ret = null;
@@ -344,7 +343,6 @@ namespace OODataBase_ClassLibrary
 
             return ret;
         }
-
         
         public bool Delete(int version)
         {

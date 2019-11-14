@@ -53,7 +53,7 @@ namespace OODataBase_ClassLibrary
         
         public bool Create(string name, object item)
         {
-            Console.WriteLine("Transaction_" + this.transactionID + " is creating item ...");
+            //Console.WriteLine("Transaction_" + this.transactionID + " is creating item ...");
 
             bool ret = true;
 
@@ -63,6 +63,7 @@ namespace OODataBase_ClassLibrary
                 {
                     ret = false;
                     transactionValid = false;
+                    db.UnlockItems(transactionID, 0, new List<string>());
                 }
                 else
                 {
@@ -94,7 +95,7 @@ namespace OODataBase_ClassLibrary
 
         public object Read(string name, int id, int version)
         {
-            Console.WriteLine("Transaction_" + transactionID + " is reading item ...");
+           // Console.WriteLine("Transaction_" + transactionID + " is reading item ...");
 
             object ret = new object();
 
@@ -104,11 +105,13 @@ namespace OODataBase_ClassLibrary
                 {
                     ret = null;
                     transactionValid = false;
+                    db.UnlockItems(transactionID, 0, new List<string>());
                 }
                 else if (!TablesList_T[name].ContainsKey(id))
                 {
                     ret = null;
                     transactionValid = false;
+                    db.UnlockItems(transactionID, 0, new List<string>());
                 }
                 else
                 {
@@ -126,7 +129,7 @@ namespace OODataBase_ClassLibrary
 
         public bool Update(string name, object item)
         {
-            Console.WriteLine("Transaction_" + transactionID + " is updating item ...");
+            //Console.WriteLine("Transaction_" + transactionID + " is updating item ...");
 
             bool ret = true;
 
@@ -158,6 +161,7 @@ namespace OODataBase_ClassLibrary
                 {
                     ret = false;
                     transactionValid = false;
+                    db.UnlockItems(transactionID, 0, new List<string>());
                 }
             }
             else
@@ -171,7 +175,7 @@ namespace OODataBase_ClassLibrary
 
         public bool Delete(string name, int id, int version)
         {
-            Console.WriteLine("Transaction_" + transactionID + " is deleting item ...");
+            //Console.WriteLine("Transaction_" + transactionID + " is deleting item ...");
 
             bool ret = true;
 
@@ -181,11 +185,13 @@ namespace OODataBase_ClassLibrary
                 {
                     ret = false;
                     transactionValid = false;
+                    db.UnlockItems(transactionID, 0, new List<string>());
                 }
                 else if (!TablesList_T[name].ContainsKey(id))
                 {
                     ret = false;
                     transactionValid = false;
+                    db.UnlockItems(transactionID, 0, new List<string>());
                 }
                 else
                 {
@@ -204,6 +210,7 @@ namespace OODataBase_ClassLibrary
                         {
                             ret = false;
                             transactionValid = false;
+                            db.UnlockItems(transactionID, 0, new List<string>());
                         }
                         else
                         {
@@ -214,6 +221,7 @@ namespace OODataBase_ClassLibrary
                     {
                         ret = false;
                         transactionValid = false;
+                        db.UnlockItems(transactionID, 0, new List<string>());
                     }
                 }
             }
@@ -228,7 +236,7 @@ namespace OODataBase_ClassLibrary
 
         public List<object> Select(string choosenType, string property, string value, int version)
         {
-            Console.WriteLine("Transaction_" + transactionID + " is selecting items ...");
+            //Console.WriteLine("Transaction_" + transactionID + " is selecting items ...");
 
             List<object> selectedItems = new List<object>();
 
@@ -308,7 +316,7 @@ namespace OODataBase_ClassLibrary
             // take snapshot of database
             // (read from .xml files)
 
-            Console.WriteLine("Transaction_" + transactionID + " is BEGINING ...");
+            //Console.WriteLine("Transaction_" + transactionID + " is BEGINING ...");
 
             bool ret = true;
 
@@ -322,6 +330,7 @@ namespace OODataBase_ClassLibrary
             {
                 ret = false;
                 transactionValid = false;
+                db.UnlockItems(transactionID, 0, new List<string>());
             }
 
             return ret;
@@ -336,7 +345,7 @@ namespace OODataBase_ClassLibrary
 
             if (transactionValid)
             {
-                Console.WriteLine("Transaction_" + transactionID + " is COMMITING changes ...");
+                //Console.WriteLine("Transaction_" + transactionID + " is COMMITING changes ...");
 
                 string name;
                 int id;
@@ -444,10 +453,11 @@ namespace OODataBase_ClassLibrary
 
                 db.UnlockItems(transactionID, Version, changeTheseXMLs);
             }
-            else
-            {
-                Console.WriteLine("Transaction_" + transactionID + " is NOT COMMITING changes ...");
-            }
+            //else
+            //{
+            //    db.UnlockItems(transactionID, 0, new List<string>());
+            //    //Console.WriteLine("Transaction_" + transactionID + " is NOT COMMITING changes ...");
+            //}
 
             // all operations from Transaction were successfull
             Reset();
@@ -460,7 +470,7 @@ namespace OODataBase_ClassLibrary
             // at any point in Transaction
             // (some operation went wrong, go back to BEGIN state)
 
-            Console.WriteLine("Transaction_" + transactionID + " is ROLLING BACK changes ...");
+            //Console.WriteLine("Transaction_" + transactionID + " is ROLLING BACK changes ...");
 
             string name;
             int id;
